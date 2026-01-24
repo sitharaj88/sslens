@@ -18,6 +18,7 @@ src/**
 # Documentation (keep README for marketplace)
 vsc-extension-quickstart.md
 CHANGELOG.md
+LINKEDIN_POST.md
 
 # Dependencies - no production deps needed
 node_modules/**
@@ -32,5 +33,4 @@ test/**
 package-lock.json
 
 # Keep only PNG icon for marketplace
-media/*.svg
 media/*.svg

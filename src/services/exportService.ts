@@ -126,61 +126,71 @@ val retrofit = Retrofit.Builder()
    * iOS Swift URLSession certificate pinning
    */
   private generateSwiftPinning(options: PinningCodeOptions): string {
-    const hashArray = options.hashes.map(h => `    "${h.replace('sha256/', '')}"`).join(',\n');
+    const hashArray = options.hashes.map(h => `        "${h.replace('sha256/', '')}"`).join(',\n');
 
     return `// iOS URLSession Certificate Pinning
 // Implement URLSessionDelegate for certificate validation
 
 import Foundation
-import CommonCrypto
+import CryptoKit
 
 class SSLPinningDelegate: NSObject, URLSessionDelegate {
     
-    // SHA-256 hashes of pinned certificates
-    private let pinnedHashes: [String] = [
+    // SHA-256 hashes of pinned public keys (Base64 encoded)
+    private let pinnedHashes: Set<String> = [
 ${hashArray}
     ]
     
-    func urlSession(_ session: URLSession,
-                    didReceive challenge: URLAuthenticationChallenge,
-                    completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
-        
+    func urlSession(
+        _ session: URLSession,
+        didReceive challenge: URLAuthenticationChallenge,
+        completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
+    ) {
         guard challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
-              let serverTrust = challenge.protectionSpace.serverTrust,
-              challenge.protectionSpace.host == "${options.domains[0]}" else {
+              let serverTrust = challenge.protectionSpace.serverTrust else {
             completionHandler(.cancelAuthenticationChallenge, nil)
             return
         }
         
-        // Get the certificate chain
-        if let certificateChain = SecTrustCopyCertificateChain(serverTrust) as? [SecCertificate] {
-            for certificate in certificateChain {
-                let publicKey = SecCertificateCopyKey(certificate)
-                if let publicKeyData = SecKeyCopyExternalRepresentation(publicKey!, nil) as Data? {
-                    let hash = sha256(data: publicKeyData)
-                    if pinnedHashes.contains(hash) {
-                        completionHandler(.useCredential, URLCredential(trust: serverTrust))
-                        return
-                    }
-                }
+        // Validate the certificate chain
+        let certificateCount = SecTrustGetCertificateCount(serverTrust)
+        
+        for index in 0..<certificateCount {
+            guard let certificate = SecTrustGetCertificateAtIndex(serverTrust, index),
+                  let publicKey = SecCertificateCopyKey(certificate),
+                  let publicKeyData = SecKeyCopyExternalRepresentation(publicKey, nil) as Data? else {
+                continue
+            }
+            
+            // Calculate SHA-256 hash of the public key
+            let hash = SHA256.hash(data: publicKeyData)
+            let hashBase64 = Data(hash).base64EncodedString()
+            
+            if pinnedHashes.contains(hashBase64) {
+                completionHandler(.useCredential, URLCredential(trust: serverTrust))
+                return
             }
         }
         
         // Pin validation failed
         completionHandler(.cancelAuthenticationChallenge, nil)
     }
-    
-    private func sha256(data: Data) -> String {
-        var hash = [UInt8](repeating: 0, count: Int(CC_SHA256_DIGEST_LENGTH))
-        data.withUnsafeBytes {
-            _ = CC_SHA256($0.baseAddress, CC_LONG(data.count), &hash)
-        }
-        return Data(hash).base64EncodedString()
-    }
 }
 
 // Usage:
-// let session = URLSession(configuration: .default, delegate: SSLPinningDelegate(), delegateQueue: nil)
+let delegate = SSLPinningDelegate()
+let session = URLSession(
+    configuration: .default,
+    delegate: delegate,
+    delegateQueue: nil
+)
+
+// Make request
+let url = URL(string: "https://${options.domains[0]}/api/endpoint")!
+let task = session.dataTask(with: url) { data, response, error in
+    // Handle response
+}
+task.resume()
 `;
   }
 
@@ -188,34 +198,52 @@ ${hashArray}
    * iOS Alamofire certificate pinning
    */
   private generateAlamofirePinning(options: PinningCodeOptions): string {
-    return `// Alamofire Certificate Pinning
-// Configure ServerTrustManager for certificate pinning
+    const hashArray = options.hashes.map(h => `        "${h.replace('sha256/', '')}"`).join(',\n');
+
+    return `// Alamofire Certificate Pinning (Alamofire 5.x)
+// Configure ServerTrustManager for public key pinning
 
 import Alamofire
+import CryptoKit
 
-// Create the server trust manager with pinned certificates
+// Expected public key hashes (SHA-256, Base64 encoded)
+let expectedHashes: Set<String> = [
+${hashArray}
+]
+
+// Option 1: Using PublicKeysTrustEvaluator (recommended for public key pinning)
 let evaluators: [String: ServerTrustEvaluating] = [
-    "${options.domains[0]}": PublicKeysTrustEvaluator()
+    "${options.domains[0]}": PublicKeysTrustEvaluator(
+        keys: [], // Will use keys from server certificate
+        performDefaultValidation: true,
+        validateHost: true
+    )
 ]
 
 let serverTrustManager = ServerTrustManager(evaluators: evaluators)
-
-// Create session with certificate pinning
 let session = Session(serverTrustManager: serverTrustManager)
 
-// For hash-based pinning, use PinnedCertificatesTrustEvaluator:
-// let pinnedCertificates = [
-//     SecCertificateCreateWithData(nil, certificateData as CFData)!
-// ]
-// let evaluators: [String: ServerTrustEvaluating] = [
-//     "${options.domains[0]}": PinnedCertificatesTrustEvaluator(certificates: pinnedCertificates)
-// ]
-
 // Usage:
-// session.request("https://${options.domains[0]}/api/endpoint")
-//     .responseDecodable(of: MyResponse.self) { response in
-//         // Handle response
-//     }
+session.request("https://${options.domains[0]}/api/endpoint")
+    .validate()
+    .responseDecodable(of: YourResponseType.self) { response in
+        switch response.result {
+        case .success(let data):
+            print("Success: \\(data)")
+        case .failure(let error):
+            print("Error: \\(error)")
+        }
+    }
+
+// Option 2: Bundle certificates in your app
+// 1. Export the certificate as .cer file
+// 2. Add to your app bundle
+// 3. Use PinnedCertificatesTrustEvaluator
+/*
+let evaluators: [String: ServerTrustEvaluating] = [
+    "${options.domains[0]}": PinnedCertificatesTrustEvaluator()
+]
+*/
 `;
   }
 
@@ -230,49 +258,73 @@ let session = Session(serverTrustManager: serverTrustManager)
 
 import 'dart:io';
 import 'dart:convert';
-import 'package:crypto/crypto.dart';
+import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
+import 'package:crypto/crypto.dart';
 
-class CertificatePinningInterceptor {
-  static const List<String> _pinnedHashes = [
+class CertificatePinning {
+  /// SHA-256 hashes of pinned certificates (Base64 encoded)
+  static const List<String> pinnedHashes = [
 ${hashList},
   ];
 
-  static Dio createPinnedDio() {
-    final dio = Dio();
+  /// Creates a Dio instance with certificate pinning enabled
+  static Dio createSecureDio({String? baseUrl}) {
+    final dio = Dio(BaseOptions(baseUrl: baseUrl));
     
-    (dio.httpClientAdapter as IOHttpClientAdapter).createHttpClient = () {
-      final client = HttpClient();
-      
-      client.badCertificateCallback = (X509Certificate cert, String host, int port) {
-        if (host != '${options.domains[0]}') {
-          return false;
-        }
+    dio.httpClientAdapter = IOHttpClientAdapter(
+      createHttpClient: () {
+        final client = HttpClient();
         
-        // Calculate the certificate hash
-        final certHash = base64Encode(
-          sha256.convert(cert.der).bytes
-        );
+        client.badCertificateCallback = (X509Certificate cert, String host, int port) {
+          // Only validate for the pinned domain
+          if (!host.contains('${options.domains[0]}')) {
+            return false; // Reject unknown hosts
+          }
+          
+          // Calculate SHA-256 hash of the certificate's DER encoding
+          final Uint8List derBytes = Uint8List.fromList(cert.der);
+          final digest = sha256.convert(derBytes);
+          final certHash = base64Encode(digest.bytes);
+          
+          // Check if the certificate hash matches any pinned hash
+          final isValid = pinnedHashes.contains(certHash);
+          
+          if (!isValid) {
+            print('Certificate pinning failed for $host');
+            print('Received hash: $certHash');
+          }
+          
+          return isValid;
+        };
         
-        return _pinnedHashes.contains(certHash);
-      };
-      
-      return client;
-    };
+        return client;
+      },
+    );
     
     return dio;
   }
 }
 
 // Usage:
-// final dio = CertificatePinningInterceptor.createPinnedDio();
-// final response = await dio.get('https://${options.domains[0]}/api/endpoint');
+void main() async {
+  final dio = CertificatePinning.createSecureDio(
+    baseUrl: 'https://${options.domains[0]}',
+  );
+  
+  try {
+    final response = await dio.get('/api/endpoint');
+    print(response.data);
+  } on DioException catch (e) {
+    print('Request failed: \${e.message}');
+  }
+}
 
-// Add to pubspec.yaml:
+// pubspec.yaml dependencies:
 // dependencies:
-//   dio: ^5.0.0
-//   crypto: ^3.0.0
+//   dio: ^5.4.0
+//   crypto: ^3.0.3
 `;
   }
 
@@ -287,31 +339,43 @@ ${hashList},
 
 import 'dart:io';
 import 'dart:convert';
+import 'dart:typed_data';
 import 'package:crypto/crypto.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/io_client.dart';
 
-class PinnedHttpClient {
-  static const List<String> _pinnedHashes = [
+class SecureHttpClient {
+  /// SHA-256 hashes of pinned certificates (Base64 encoded)
+  static const List<String> pinnedHashes = [
 ${hashList},
   ];
+  
+  static const String pinnedHost = '${options.domains[0]}';
 
+  /// Creates an http.Client with certificate pinning
   static http.Client create() {
     final httpClient = HttpClient();
     
     httpClient.badCertificateCallback = (X509Certificate cert, String host, int port) {
-      if (host != '${options.domains[0]}') {
+      // Only apply pinning to the target domain
+      if (!host.contains(pinnedHost)) {
         return false;
       }
       
-      final certHash = base64Encode(
-        sha256.convert(cert.der).bytes
-      );
+      // Calculate SHA-256 hash of the certificate
+      final Uint8List derBytes = Uint8List.fromList(cert.der);
+      final digest = sha256.convert(derBytes);
+      final certHash = base64Encode(digest.bytes);
       
-      return _pinnedHashes.contains(certHash);
+      return pinnedHashes.contains(certHash);
     };
     
     return IOClient(httpClient);
+  }
+  
+  /// Close the client when done
+  static void close(http.Client client) {
+    client.close();
   }
 }
 
@@ -332,61 +396,93 @@ ${hashList},
    */
   private generateReactNativePinning(options: PinningCodeOptions): string {
     const hashList = options.hashes.map(h => `      '${h}'`).join(',\n');
+    const hashListClean = options.hashes.map(h => `            <pin digest="SHA-256">${h.replace('sha256/', '')}</pin>`).join('\n');
 
     return `// React Native Certificate Pinning
-// Using react-native-ssl-pinning or similar library
+// Multiple implementation options
 
-// Option 1: Using react-native-ssl-pinning
+// ═══════════════════════════════════════════════════════════════
+// OPTION 1: react-native-ssl-pinning (Recommended)
+// ═══════════════════════════════════════════════════════════════
 // npm install react-native-ssl-pinning
+// cd ios && pod install
 
-import { fetch } from 'react-native-ssl-pinning';
+import { fetch as sslFetch } from 'react-native-ssl-pinning';
 
-const pinnedDomains = {
-  '${options.domains[0]}': {
-    includeSubdomains: true,
-    publicKeyHashes: [
+// SHA-256 public key hashes
+const PINNED_HASHES = [
 ${hashList},
-    ],
-  },
-};
+];
 
-async function makeSecureRequest() {
+export async function secureRequest(endpoint: string, options = {}) {
   try {
-    const response = await fetch('https://${options.domains[0]}/api/endpoint', {
-      method: 'GET',
-      timeoutInterval: 10000,
-      sslPinning: {
-        certs: ['${options.domains[0].replace(/\./g, '_')}'], // Certificate file name without extension
-      },
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    const response = await sslFetch(
+      \`https://${options.domains[0]}\${endpoint}\`,
+      {
+        method: 'GET',
+        timeoutInterval: 10000,
+        sslPinning: {
+          certs: ['${options.domains[0].replace(/\./g, '_')}'],
+        },
+        ...options,
+      }
+    );
     
-    const data = await response.json();
-    return data;
+    return await response.json();
   } catch (error) {
-    console.error('SSL Pinning failed:', error);
+    if (error.message?.includes('SSL')) {
+      console.error('SSL Pinning validation failed');
+    }
     throw error;
   }
 }
 
-// Option 2: Using TrustKit (iOS) + OkHttp (Android)
-// For Android, add to network_security_config.xml:
+// ═══════════════════════════════════════════════════════════════
+// OPTION 2: Android Network Security Config (Native)
+// ═══════════════════════════════════════════════════════════════
+// Create: android/app/src/main/res/xml/network_security_config.xml
+
 /*
 <?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
-    <domain-config>
+    <domain-config cleartextTrafficPermitted="false">
         <domain includeSubdomains="true">${options.domains[0]}</domain>
-        <pin-set>
-${options.hashes.map(h => `            <pin digest="SHA-256">${h.replace('sha256/', '')}</pin>`).join('\n')}
+        <pin-set expiration="2025-12-31">
+${hashListClean}
+            <!-- Backup pin (recommended) -->
+            <!-- <pin digest="SHA-256">BACKUP_HASH_HERE</pin> -->
         </pin-set>
     </domain-config>
 </network-security-config>
 */
 
-// Export for use
-export { makeSecureRequest, pinnedDomains };
+// Then add to AndroidManifest.xml:
+// <application android:networkSecurityConfig="@xml/network_security_config" ...>
+
+// ═══════════════════════════════════════════════════════════════
+// OPTION 3: TrustKit for iOS (Native)
+// ═══════════════════════════════════════════════════════════════
+// Add to Info.plist:
+
+/*
+<key>TSKConfiguration</key>
+<dict>
+    <key>TSKSwizzleNetworkDelegates</key>
+    <true/>
+    <key>TSKPinnedDomains</key>
+    <dict>
+        <key>${options.domains[0]}</key>
+        <dict>
+            <key>TSKIncludeSubdomains</key>
+            <true/>
+            <key>TSKPublicKeyHashes</key>
+            <array>
+${options.hashes.map(h => `                <string>${h.replace('sha256/', '')}</string>`).join('\n')}
+            </array>
+        </dict>
+    </dict>
+</dict>
+*/
 `;
   }
 

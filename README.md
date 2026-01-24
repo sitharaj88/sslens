@@ -6,49 +6,96 @@
 
 <p align="center">
   <strong>Modern SSL/TLS Certificate Inspector & Pinning Toolkit</strong><br>
-  Fetch, analyze, and export certificates with ease
+  <em>Fetch, analyze, and export certificates with ease</em>
 </p>
 
 <p align="center">
-  <a href="#features">Features</a> •
-  <a href="#installation">Installation</a> •
-  <a href="#usage">Usage</a> •
-  <a href="#commands">Commands</a> •
-  <a href="#pinning-code">Pinning Code</a>
+  <a href="#-features">Features</a> •
+  <a href="#-installation">Installation</a> •
+  <a href="#-usage">Usage</a> •
+  <a href="#-commands">Commands</a> •
+  <a href="#-pinning-code-examples">Pinning Code</a>
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/version-2.0.0-6366f1?style=flat-square" alt="Version">
-  <img src="https://img.shields.io/badge/license-MIT-10b981?style=flat-square" alt="License">
-  <img src="https://img.shields.io/badge/vscode-1.85+-8b5cf6?style=flat-square" alt="VS Code">
+  <img src="https://img.shields.io/badge/version-2.0.0-6366f1?style=for-the-badge" alt="Version">
+  <img src="https://img.shields.io/badge/license-MIT-10b981?style=for-the-badge" alt="License">
+  <img src="https://img.shields.io/badge/VS%20Code-1.85+-8b5cf6?style=for-the-badge&logo=visual-studio-code" alt="VS Code">
 </p>
+
+---
+
+<p align="center">
+  <img src="https://img.shields.io/badge/🔍_Certificate_Inspection-Fetch_from_any_domain-6366f1?style=flat-square" alt="Feature">
+  <img src="https://img.shields.io/badge/📌_SSL_Pinning-Android_iOS_Flutter_React_Native-8b5cf6?style=flat-square" alt="Feature">
+  <img src="https://img.shields.io/badge/📤_Export-PEM_DER_Hashes-a855f7?style=flat-square" alt="Feature">
+  <img src="https://img.shields.io/badge/⏰_Expiry_Monitoring-Visual_Status-10b981?style=flat-square" alt="Feature">
+</p>
+
+---
+
+## 🎯 Why SSLens?
+
+| Problem | SSLens Solution |
+|---------|-----------------|
+| 🔴 Manually extracting SSL hashes | ✅ One-click hash generation |
+| 🔴 Writing pinning code from scratch | ✅ Ready-to-use code for 7 platforms |
+| 🔴 Checking certificate expiry manually | ✅ Visual expiry monitoring |
+| 🔴 Comparing staging vs production certs | ✅ Built-in comparison tool |
+| 🔴 Managing multiple domain certificates | ✅ Save favorites & bulk fetch |
 
 ---
 
 ## ✨ Features
 
-### 🔍 Certificate Inspection
-- **Fetch SSL certificates** from any domain instantly
-- **View complete certificate chain** with visual hierarchy
-- **Inspect all details**: subject, issuer, validity, extensions
-- **Custom port support** (not just 443)
-- **SNI (Server Name Indication)** support
+<table>
+<tr>
+<td width="50%">
 
-### 📌 Certificate Pinning Made Easy
-- **One-click hash generation** for all major platforms
-- **Public Key Hash** (SHA-256 Base64)
-- **SPKI Hash** for modern pinning implementations
-- **Generate ready-to-use code** for:
-  - **Android**: OkHttp, Retrofit
-  - **iOS**: URLSession, Alamofire
-  - **Flutter**: Dio, http package
-  - **React Native**: ssl-pinning library
+### 🔍 Certificate Inspection
+- Fetch SSL certificates from **any domain**
+- View **complete certificate chain**
+- Inspect subject, issuer, validity, extensions
+- **Custom port support** (not just 443)
+- **SNI** support
+
+</td>
+<td width="50%">
+
+### 📌 Certificate Pinning
+- **One-click** hash generation
+- Public Key Hash (SHA-256 Base64)
+- SPKI Hash for modern pinning
+- Ready-to-use code for:
+  - Android (OkHttp, Retrofit)
+  - iOS (URLSession, Alamofire)
+  - Flutter (Dio, http)
+  - React Native
+
+</td>
+</tr>
+<tr>
+<td width="50%">
 
 ### 📤 Export Options
 - Export as **PEM** format
 - Export as **DER** format
-- **Copy fingerprints** (SHA-256, SHA-1, MD5)
-- **Copy hashes** directly to clipboard
+- Copy **fingerprints** (SHA-256, SHA-1, MD5)
+- Copy hashes to **clipboard**
+
+</td>
+<td width="50%">
+
+### ⏰ Expiry Monitoring
+- **Visual status** (🟢 🟡 🔴)
+- Batch expiry check
+- Days-until-expiry tracking
+- Warning badges
+
+</td>
+</tr>
+<tr>
+<td colspan="2">
 
 ### 📋 Domain Management
 - **Save favorite domains** for quick access
@@ -57,21 +104,21 @@
 - **Compare certificates** between environments
 - **Import/Export** domain lists as JSON
 
-### ⏰ Expiry Monitoring
-- **Visual status indicators** (green/yellow/red)
-- **Batch expiry check** for all saved domains
-- **Days-until-expiry** tracking
-- **Warning badges** for expiring certificates
+</td>
+</tr>
+</table>
 
 ---
 
 ## 📥 Installation
 
 ### From VS Code Marketplace
+```
 1. Open VS Code
-2. Go to Extensions (`Cmd+Shift+X` / `Ctrl+Shift+X`)
-3. Search for **"SSLens"**
-4. Click **Install**
+2. Go to Extensions (Cmd+Shift+X / Ctrl+Shift+X)
+3. Search for "SSLens"
+4. Click Install
+```
 
 ### From VSIX
 ```bash
@@ -84,20 +131,22 @@ code --install-extension sslens-2.0.0.vsix
 
 ### Quick Start
 
-1. **Open Command Palette** (`Cmd+Shift+P` / `Ctrl+Shift+P`)
-2. Type `SSLens: Fetch Certificate from URL`
-3. Enter a domain (e.g., `api.github.com`)
+```
+1. Open Command Palette (Cmd+Shift+P / Ctrl+Shift+P)
+2. Type "SSLens: Fetch Certificate from URL"
+3. Enter a domain (e.g., api.github.com)
 4. View certificate details in the beautiful panel
+```
 
 ### From Sidebar
 
-1. Click the **SSLens** icon in the Activity Bar (shield icon)
+1. Click the **SSLens** icon in the Activity Bar (🛡️ shield icon)
 2. Click the **+** button to add a domain
 3. Click any saved domain to fetch its certificate
 
-### Keyboard Shortcut
+### Status Bar
 
-The extension adds a status bar item — just click **🛡️ SSLens** to quickly fetch a certificate!
+Click **🛡️ SSLens** in the status bar to quickly fetch a certificate!
 
 ---
 
@@ -124,45 +173,117 @@ The extension adds a status bar item — just click **🛡️ SSLens** to quickl
 
 ## 🛠️ Pinning Code Examples
 
-SSLens generates ready-to-use pinning code for all major platforms:
+SSLens generates **ready-to-use** pinning code for all major platforms:
 
-### Android (OkHttp)
+<details>
+<summary><b>🤖 Android (OkHttp/Retrofit)</b></summary>
 
 ```kotlin
+import okhttp3.CertificatePinner
+import okhttp3.OkHttpClient
+
 val certificatePinner = CertificatePinner.Builder()
     .add("api.example.com", "sha256/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=")
+    // Add backup pin for certificate rotation
+    .add("api.example.com", "sha256/BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB=")
     .build()
 
 val client = OkHttpClient.Builder()
     .certificatePinner(certificatePinner)
     .build()
 ```
+</details>
 
-### iOS (Swift)
+<details>
+<summary><b>🍎 iOS (Swift URLSession)</b></summary>
 
 ```swift
-let pinnedHashes = ["AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="]
+import Foundation
+import CryptoKit
 
-func urlSession(_ session: URLSession,
-                didReceive challenge: URLAuthenticationChallenge,
-                completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
-    // Validate certificate hash against pinnedHashes
+class SSLPinningDelegate: NSObject, URLSessionDelegate {
+    private let pinnedHashes: Set<String> = [
+        "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+    ]
+    
+    func urlSession(
+        _ session: URLSession,
+        didReceive challenge: URLAuthenticationChallenge,
+        completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
+    ) {
+        guard let serverTrust = challenge.protectionSpace.serverTrust else {
+            completionHandler(.cancelAuthenticationChallenge, nil)
+            return
+        }
+        
+        // Validate public key hash against pinned hashes
+        let certificateCount = SecTrustGetCertificateCount(serverTrust)
+        for index in 0..<certificateCount {
+            if let cert = SecTrustGetCertificateAtIndex(serverTrust, index),
+               let publicKey = SecCertificateCopyKey(cert),
+               let keyData = SecKeyCopyExternalRepresentation(publicKey, nil) as Data? {
+                let hash = SHA256.hash(data: keyData)
+                if pinnedHashes.contains(Data(hash).base64EncodedString()) {
+                    completionHandler(.useCredential, URLCredential(trust: serverTrust))
+                    return
+                }
+            }
+        }
+        completionHandler(.cancelAuthenticationChallenge, nil)
+    }
 }
 ```
+</details>
 
-### Flutter (Dio)
+<details>
+<summary><b>🐦 Flutter (Dio)</b></summary>
 
 ```dart
-final dio = Dio();
-(dio.httpClientAdapter as IOHttpClientAdapter).createHttpClient = () {
-  final client = HttpClient();
-  client.badCertificateCallback = (cert, host, port) {
-    final hash = base64Encode(sha256.convert(cert.der).bytes);
-    return pinnedHashes.contains(hash);
-  };
-  return client;
-};
+import 'dart:io';
+import 'dart:convert';
+import 'package:dio/dio.dart';
+import 'package:dio/io.dart';
+import 'package:crypto/crypto.dart';
+
+final pinnedHashes = ['AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA='];
+
+Dio createSecureDio() {
+  final dio = Dio();
+  
+  dio.httpClientAdapter = IOHttpClientAdapter(
+    createHttpClient: () {
+      final client = HttpClient();
+      client.badCertificateCallback = (cert, host, port) {
+        final hash = base64Encode(sha256.convert(cert.der).bytes);
+        return pinnedHashes.contains(hash);
+      };
+      return client;
+    },
+  );
+  
+  return dio;
+}
 ```
+</details>
+
+<details>
+<summary><b>⚛️ React Native</b></summary>
+
+```javascript
+// Using react-native-ssl-pinning
+import { fetch } from 'react-native-ssl-pinning';
+
+const response = await fetch('https://api.example.com/endpoint', {
+  method: 'GET',
+  sslPinning: {
+    certs: ['my_certificate'], // Certificate file name in assets
+  },
+});
+
+// Or use Android network_security_config.xml:
+// <pin digest="SHA-256">AAAAAAA...=</pin>
+```
+</details>
 
 ---
 
@@ -188,13 +309,15 @@ final dio = Dio();
 
 ---
 
-## 🔒 Security Notes
+## 🔒 Security
 
-- ✅ Certificates are only stored locally
-- ✅ No data is sent to external servers
-- ✅ All TLS connections use your system's trust store
-- ✅ Self-signed certificates can be inspected (shown as invalid)
-- ✅ Open source and auditable
+| | |
+|---|---|
+| ✅ | Certificates stored **locally only** |
+| ✅ | **No data** sent to external servers |
+| ✅ | Uses system's **trust store** |
+| ✅ | Self-signed certs can be inspected |
+| ✅ | **Open source** and auditable |
 
 ---
 
@@ -202,11 +325,22 @@ final dio = Dio();
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+```bash
+# Fork the repository
+git clone https://github.com/sitharaj88/sslens.git
+cd sslens
+
+# Create your feature branch
+git checkout -b feature/AmazingFeature
+
+# Commit your changes
+git commit -m 'Add some AmazingFeature'
+
+# Push to the branch
+git push origin feature/AmazingFeature
+
+# Open a Pull Request
+```
 
 ---
 
@@ -216,20 +350,20 @@ MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
-## 🙏 Acknowledgments
-
-- Inspired by the need for easier certificate pinning
-- Built with ❤️ for mobile developers
-- Modern UI inspired by contemporary design trends
-
----
-
 <p align="center">
-  <strong>Made with 💜 by <a href="https://github.com/sitharaj">Sitharaj</a></strong>
+  <strong>Made with 💜 by <a href="https://github.com/sitharaj88">Sitharaj</a></strong>
 </p>
 
 <p align="center">
-  <a href="https://github.com/sitharaj/sslens">GitHub</a> •
-  <a href="https://github.com/sitharaj/sslens/issues">Report Bug</a> •
-  <a href="https://github.com/sitharaj/sslens/issues">Request Feature</a>
+  <a href="https://www.buymeacoffee.com/sitharaj88" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/sitharaj88/sslens">⭐ Star on GitHub</a> •
+  <a href="https://github.com/sitharaj88/sslens/issues">🐛 Report Bug</a> •
+  <a href="https://github.com/sitharaj88/sslens/issues">💡 Request Feature</a>
+</p>
+
+<p align="center">
+  <sub>🔍 SSLens — The SSL/TLS toolkit every developer needs</sub>
 </p>
