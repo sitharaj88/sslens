@@ -1,5 +1,6 @@
 /**
- * SSL Service - Core certificate fetching and parsing
+ * SSLens - SSL Service
+ * Core certificate fetching and parsing
  * Handles TLS connections and certificate extraction
  */
 

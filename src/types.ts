@@ -1,5 +1,5 @@
 /**
- * SSL Helper - Type Definitions
+ * SSLens - Type Definitions
  * Core types for certificate handling and export
  */
 

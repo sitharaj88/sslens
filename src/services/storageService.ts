@@ -1,5 +1,6 @@
 /**
- * Storage Service - Persist saved domains and recent certificates
+ * SSLens - Storage Service
+ * Persist saved domains and recent certificates
  * Uses VS Code's workspace configuration for storage
  */
 
@@ -80,7 +81,7 @@ export class StorageService {
    */
   async addRecentCertificate(cert: CertificateInfo): Promise<void> {
     const recent = this.getRecentCertificates();
-    const maxItems = vscode.workspace.getConfiguration('sslHelper').get<number>('maxRecentItems', 10);
+    const maxItems = vscode.workspace.getConfiguration('sslens').get<number>('maxRecentItems', 10);
 
     // Remove existing entry for same domain
     const filtered = recent.filter(r => !(r.domain === cert.domain && r.port === cert.port));

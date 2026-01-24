@@ -1,5 +1,5 @@
 /**
- * Tree View Providers
+ * SSLens - Tree View Providers
  * Sidebar views for saved domains and recent certificates
  */
 
@@ -32,7 +32,7 @@ class DomainTreeItem extends vscode.TreeItem {
 
     // Click to fetch certificate
     this.command = {
-      command: 'ssl-helper.fetchFromDomain',
+      command: 'sslens.fetchFromDomain',
       title: 'Fetch Certificate',
       arguments: [domain, port]
     };
@@ -102,7 +102,7 @@ class RecentCertTreeItem extends vscode.TreeItem {
     this.contextValue = 'recentCert';
 
     this.command = {
-      command: 'ssl-helper.fetchFromDomain',
+      command: 'sslens.fetchFromDomain',
       title: 'Fetch Certificate',
       arguments: [domain, port]
     };
@@ -225,8 +225,8 @@ export function registerTreeViews(context: vscode.ExtensionContext): void {
   savedDomainsProvider = new SavedDomainsProvider();
   recentCertificatesProvider = new RecentCertificatesProvider();
 
-  vscode.window.registerTreeDataProvider('sslHelperDomains', savedDomainsProvider);
-  vscode.window.registerTreeDataProvider('sslHelperRecent', recentCertificatesProvider);
+  vscode.window.registerTreeDataProvider('sslensDomains', savedDomainsProvider);
+  vscode.window.registerTreeDataProvider('sslensRecent', recentCertificatesProvider);
 }
 
 /**

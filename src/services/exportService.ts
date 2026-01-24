@@ -1,5 +1,6 @@
 /**
- * Export Service - Certificate export and format conversion
+ * SSLens - Export Service
+ * Certificate export and format conversion
  * Handles various export formats and pinning code generation
  */
 

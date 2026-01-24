@@ -1,5 +1,5 @@
 /**
- * Inspect Local Certificate Command
+ * SSLens - Inspect Local Certificate Command
  * Parse and inspect local certificate files (.pem, .crt, .cer)
  */
 

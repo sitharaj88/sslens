@@ -1,5 +1,5 @@
 /**
- * Bulk Operations Command
+ * SSLens - Bulk Operations Command
  * Fetch certificates for multiple domains at once
  */
 
@@ -83,7 +83,7 @@ export async function bulkFetchCommand(context: vscode.ExtensionContext): Promis
   });
   await vscode.window.showTextDocument(doc);
 
-  vscode.commands.executeCommand('ssl-helper.refreshDomains');
+  vscode.commands.executeCommand('sslens.refreshDomains');
 
   const successful = results.filter(r => r.success).length;
   const failed = results.filter(r => !r.success).length;

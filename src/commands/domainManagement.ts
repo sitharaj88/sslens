@@ -199,7 +199,7 @@ export async function importDomainsCommand(): Promise<void> {
     await storageService.importData(data);
     
     vscode.window.showInformationMessage('Data imported successfully');
-    vscode.commands.executeCommand('ssl-helper.refreshDomains');
+    vscode.commands.executeCommand('sslens.refreshDomains');
   } catch (error) {
     vscode.window.showErrorMessage(`Import failed: ${error}`);
   }
