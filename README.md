@@ -1,7 +1,7 @@
 # 🔍 SSLens for VS Code
 
 <p align="center">
-  <img src="media/icon.png" width="128" height="128" alt="SSLens Logo">
+  <img src="media/icon_large.png" width="160" height="160" alt="SSLens Logo">
 </p>
 
 <p align="center">
@@ -18,7 +18,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/version-1.0.0-6366f1?style=for-the-badge" alt="Version">
+  <img src="https://img.shields.io/badge/version-1.0.1-6366f1?style=for-the-badge" alt="Version">
   <img src="https://img.shields.io/badge/license-MIT-10b981?style=for-the-badge" alt="License">
   <img src="https://img.shields.io/badge/VS%20Code-1.85+-8b5cf6?style=for-the-badge&logo=visual-studio-code" alt="VS Code">
 </p>

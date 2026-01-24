@@ -5,6 +5,11 @@ All notable changes to SSLens will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.1] - 2026-01-24
+
+### 🎨 Updated
+- Updated app icon with "Modern Tech" gradient (Royal Purple to Deep Cosmic Violet)
+
 ## [1.0.0] - 2026-01-24
 
 ### 🎉 Initial Release - SSLens

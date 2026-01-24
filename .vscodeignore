@@ -1,3 +1,11 @@
+# Media
+media/*.svg
+media/icon_large.png
+media/modern_icon.svg
+media/premium_icon.svg
+media/icon_source.svg
+media/banner.html
+
 # Development files
 .vscode/**
 .vscode-test/**
