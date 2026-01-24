@@ -5,13 +5,13 @@ All notable changes to SSLens will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.0.0] - 2026-01-24
+## [1.0.0] - 2026-01-24
 
-### 🎉 Major Release - Rebrand to SSLens
+### 🎉 Initial Release - SSLens
 
-This release marks a complete transformation of SSL Helper into **SSLens** - a modern, feature-rich SSL/TLS certificate inspection and pinning toolkit.
+A modern, feature-rich SSL/TLS certificate inspection and pinning toolkit for VS Code.
 
-### ✨ Added
+### ✨ Features
 
 - **Modern UI Design**
   - Glassmorphism-inspired interface with smooth animations

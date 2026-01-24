@@ -2,7 +2,7 @@
   "name": "sslens",
   "displayName": "SSLens",
   "description": "Modern SSL/TLS certificate inspector & pinning toolkit. Fetch, analyze, and export certificates with ease. Perfect for mobile developers.",
-  "version": "2.0.0",
+  "version": "1.0.0",
   "publisher": "sitharaj",
   "engines": {
     "vscode": "^1.85.0"
