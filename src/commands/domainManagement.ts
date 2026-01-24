@@ -5,27 +5,42 @@
 
 import * as vscode from 'vscode';
 import { getStorageService } from '../services/storageService';
-import { SavedDomain } from '../types';
+import { SavedDomain, CertificateInfo } from '../types';
 
 /**
  * Save a domain to favorites
+ * If a certificate is currently being viewed, use that domain
+ * Otherwise, prompt for input
  */
-export async function saveDomainCommand(): Promise<void> {
-  const input = await vscode.window.showInputBox({
-    prompt: 'Enter domain to save',
-    placeHolder: 'api.example.com:443'
-  });
+export async function saveDomainCommand(currentCert?: CertificateInfo): Promise<void> {
+  let domain: string;
+  let port: number;
 
-  if (!input) {
-    return;
+  if (currentCert) {
+    // Use the current certificate's domain
+    domain = currentCert.domain;
+    port = currentCert.port;
+  } else {
+    // No current certificate, ask for input
+    const input = await vscode.window.showInputBox({
+      prompt: 'Enter domain to save',
+      placeHolder: 'api.example.com:443'
+    });
+
+    if (!input) {
+      return;
+    }
+
+    const parsed = parseDomainInput(input);
+    domain = parsed.domain;
+    port = parsed.port;
   }
-
-  const { domain, port } = parseDomainInput(input);
 
   // Optional: Get an alias
   const alias = await vscode.window.showInputBox({
     prompt: 'Enter an alias (optional)',
-    placeHolder: 'Production API'
+    placeHolder: 'Production API',
+    value: domain
   });
 
   const storageService = getStorageService();

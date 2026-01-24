@@ -184,7 +184,8 @@ export function activate(context: vscode.ExtensionContext) {
   // Save domain
   context.subscriptions.push(
     vscode.commands.registerCommand('sslens.saveDomain', () => {
-      saveDomainCommand();
+      const currentCert = getCurrentCertificate();
+      saveDomainCommand(currentCert);
     })
   );
 

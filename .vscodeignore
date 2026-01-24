@@ -1,12 +1,36 @@
+# Development files
 .vscode/**
 .vscode-test/**
 src/**
+.git/**
 .gitignore
 .yarnrc
-vsc-extension-quickstart.md
+.DS_Store
+**/.DS_Store
+
+# Build & Config
 **/tsconfig.json
 **/.eslintrc.json
 **/*.map
 **/*.ts
+**/*.d.ts
+
+# Documentation (keep README for marketplace)
+vsc-extension-quickstart.md
+CHANGELOG.md
+
+# Dependencies - no production deps needed
 node_modules/**
-!node_modules/node-forge/**
+
+# Test files
+test/**
+**/*.test.js
+**/*.spec.js
+
+# Package files
+*.vsix
+package-lock.json
+
+# Keep only PNG icon for marketplace
+media/*.svg
+media/*.svg

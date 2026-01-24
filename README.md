@@ -1,7 +1,7 @@
 # 🔍 SSLens for VS Code
 
 <p align="center">
-  <img src="media/icon.svg" width="128" height="128" alt="SSLens Logo">
+  <img src="media/icon.png" width="128" height="128" alt="SSLens Logo">
 </p>
 
 <p align="center">
