@@ -1,0 +1,285 @@
+{
+  "name": "sslens",
+  "displayName": "SSLens",
+  "description": "Modern SSL/TLS certificate inspector & pinning toolkit. Fetch, analyze, and export certificates with ease. Perfect for mobile developers.",
+  "version": "2.0.0",
+  "publisher": "sitharaj",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other",
+    "Visualization",
+    "Debuggers"
+  ],
+  "keywords": [
+    "ssl",
+    "tls",
+    "certificate",
+    "pinning",
+    "https",
+    "security",
+    "android",
+    "ios",
+    "flutter",
+    "react-native",
+    "okhttp",
+    "alamofire"
+  ],
+  "icon": "media/icon.png",
+  "galleryBanner": {
+    "color": "#0f0f23",
+    "theme": "dark"
+  },
+  "activationEvents": [
+    "onCommand:sslens.fetchCertificate",
+    "onCommand:sslens.inspectLocalCert",
+    "onView:sslensDomains"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "sslens.fetchCertificate",
+        "title": "SSLens: Fetch Certificate from URL",
+        "icon": "$(cloud-download)"
+      },
+      {
+        "command": "sslens.inspectLocalCert",
+        "title": "SSLens: Inspect Local Certificate File",
+        "icon": "$(file-code)"
+      },
+      {
+        "command": "sslens.exportPEM",
+        "title": "SSLens: Export as PEM",
+        "icon": "$(export)"
+      },
+      {
+        "command": "sslens.exportDER",
+        "title": "SSLens: Export as DER",
+        "icon": "$(export)"
+      },
+      {
+        "command": "sslens.copyPublicKeyHash",
+        "title": "SSLens: Copy Public Key Hash (SHA-256)",
+        "icon": "$(copy)"
+      },
+      {
+        "command": "sslens.copySPKIHash",
+        "title": "SSLens: Copy SPKI Hash",
+        "icon": "$(copy)"
+      },
+      {
+        "command": "sslens.generatePinningCode",
+        "title": "SSLens: Generate Pinning Code",
+        "icon": "$(code)"
+      },
+      {
+        "command": "sslens.compareCertificates",
+        "title": "SSLens: Compare Two Certificates",
+        "icon": "$(diff)"
+      },
+      {
+        "command": "sslens.checkExpiry",
+        "title": "SSLens: Check Certificate Expiry",
+        "icon": "$(calendar)"
+      },
+      {
+        "command": "sslens.saveDomain",
+        "title": "SSLens: Save Domain to Favorites",
+        "icon": "$(star)"
+      },
+      {
+        "command": "sslens.removeDomain",
+        "title": "SSLens: Remove Domain from Favorites",
+        "icon": "$(star-empty)"
+      },
+      {
+        "command": "sslens.refreshDomains",
+        "title": "SSLens: Refresh Saved Domains",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "sslens.bulkFetch",
+        "title": "SSLens: Bulk Fetch Certificates",
+        "icon": "$(list-flat)"
+      },
+      {
+        "command": "sslens.validateChain",
+        "title": "SSLens: Validate Certificate Chain",
+        "icon": "$(check)"
+      },
+      {
+        "command": "sslens.editDomainAlias",
+        "title": "SSLens: Edit Domain Alias",
+        "icon": "$(edit)"
+      },
+      {
+        "command": "sslens.exportDomains",
+        "title": "SSLens: Export Saved Domains",
+        "icon": "$(export)"
+      },
+      {
+        "command": "sslens.importDomains",
+        "title": "SSLens: Import Saved Domains",
+        "icon": "$(import)"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "sslens-container",
+          "title": "SSLens",
+          "icon": "$(shield)"
+        }
+      ]
+    },
+    "views": {
+      "sslens-container": [
+        {
+          "id": "sslensDomains",
+          "name": "Saved Domains"
+        },
+        {
+          "id": "sslensRecent",
+          "name": "Recent Certificates"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "sslens.fetchCertificate",
+          "when": "view == sslensDomains",
+          "group": "navigation"
+        },
+        {
+          "command": "sslens.refreshDomains",
+          "when": "view == sslensDomains",
+          "group": "navigation"
+        },
+        {
+          "command": "sslens.bulkFetch",
+          "when": "view == sslensDomains",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "sslens.removeDomain",
+          "when": "view == sslensDomains && viewItem == domain",
+          "group": "1_actions"
+        },
+        {
+          "command": "sslens.editDomainAlias",
+          "when": "view == sslensDomains && viewItem == domain",
+          "group": "1_actions"
+        },
+        {
+          "command": "sslens.generatePinningCode",
+          "when": "view == sslensDomains && viewItem == domain",
+          "group": "2_export"
+        },
+        {
+          "command": "sslens.checkExpiry",
+          "when": "view == sslensDomains && viewItem == domain",
+          "group": "2_export"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "sslens.fetchCertificate"
+        },
+        {
+          "command": "sslens.inspectLocalCert"
+        },
+        {
+          "command": "sslens.generatePinningCode"
+        },
+        {
+          "command": "sslens.bulkFetch"
+        },
+        {
+          "command": "sslens.compareCertificates"
+        },
+        {
+          "command": "sslens.checkExpiry"
+        },
+        {
+          "command": "sslens.validateChain"
+        },
+        {
+          "command": "sslens.exportDomains"
+        },
+        {
+          "command": "sslens.importDomains"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "SSLens",
+      "properties": {
+        "sslens.defaultPort": {
+          "type": "number",
+          "default": 443,
+          "description": "Default port to use when fetching certificates"
+        },
+        "sslens.timeout": {
+          "type": "number",
+          "default": 10000,
+          "description": "Connection timeout in milliseconds"
+        },
+        "sslens.savedDomains": {
+          "type": "array",
+          "default": [],
+          "description": "List of saved domains for quick access"
+        },
+        "sslens.recentCertificates": {
+          "type": "array",
+          "default": [],
+          "description": "Recently fetched certificates"
+        },
+        "sslens.maxRecentItems": {
+          "type": "number",
+          "default": 10,
+          "description": "Maximum number of recent certificates to keep"
+        },
+        "sslens.showExpiryWarnings": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show warnings for certificates expiring within 30 days"
+        },
+        "sslens.autoRefresh": {
+          "type": "boolean",
+          "default": false,
+          "description": "Automatically refresh saved domains on startup"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "eslint src --ext ts",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/node-forge": "^1.3.14",
+    "@types/vscode": "^1.108.1",
+    "typescript": "^5.3.0"
+  },
+  "dependencies": {
+    "node-forge": "^1.3.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sitharaj/sslens"
+  },
+  "homepage": "https://github.com/sitharaj/sslens#readme",
+  "bugs": {
+    "url": "https://github.com/sitharaj/sslens/issues"
+  },
+  "license": "MIT"
+}
