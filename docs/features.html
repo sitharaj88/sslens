@@ -84,6 +84,9 @@
                         <a class="nav-link" href="getting-started.html">Getting Started</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="ssl-basics.html">SSL Basics</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link active" href="features.html">Features</a>
                     </li>
                     <li class="nav-item">
@@ -148,6 +151,59 @@
 
                 <p>SSLens provides comprehensive SSL/TLS certificate inspection capabilities. Fetch and analyze
                     certificates from any domain with full details.</p>
+
+                <h3>Subject Fields</h3>
+                <p>The extension extracts and displays key identifying information from the certificate's subject:</p>
+                <div class="table-wrapper">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Field</th>
+                                <th>Abbreviation</th>
+                                <th>Description</th>
+                                <th>Example</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Common Name</td>
+                                <td><code>CN</code></td>
+                                <td>The domain name the certificate is issued for</td>
+                                <td><code>github.com</code></td>
+                            </tr>
+                            <tr>
+                                <td>Organization</td>
+                                <td><code>O</code></td>
+                                <td>Company or organization name</td>
+                                <td>GitHub, Inc.</td>
+                            </tr>
+                            <tr>
+                                <td>Organizational Unit</td>
+                                <td><code>OU</code></td>
+                                <td>Department within organization</td>
+                                <td>Engineering</td>
+                            </tr>
+                            <tr>
+                                <td>Locality</td>
+                                <td><code>L</code></td>
+                                <td>City or locality</td>
+                                <td>San Francisco</td>
+                            </tr>
+                            <tr>
+                                <td>State</td>
+                                <td><code>ST</code></td>
+                                <td>State or province</td>
+                                <td>California</td>
+                            </tr>
+                            <tr>
+                                <td>Country</td>
+                                <td><code>C</code></td>
+                                <td>Two-letter country code</td>
+                                <td>US</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
                 <h3>What You Can Inspect</h3>
                 <ul>

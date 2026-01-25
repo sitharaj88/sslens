@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- Primary Meta Tags -->
+    <title>SSL/TLS Basics | Understanding Secure Connections - SSLens</title>
+    <meta name="title" content="SSL/TLS Basics - Understanding Secure Connections">
+    <meta name="description"
+        content="A developer-friendly guide to understanding SSL/TLS. Learn about certificates, the handshake process, public/private keys, and why SSL pinning matters.">
+    <meta name="keywords"
+        content="SSL vs TLS, SSL handshake, public key infrastructure, certificate authority, SSL pinning explained, HTTPS tutorial">
+    <meta name="author" content="Sitharaj Seenivasan">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://sitharaj88.github.io/sslens/ssl-basics.html">
+    <meta property="og:title" content="Understanding SSL/TLS - A Developer's Guide">
+    <meta property="og:description"
+        content="Master the basics of secure connections. Handshakes, Keys, and Certificates explained.">
+    <meta property="og:image" content="https://sitharaj88.github.io/sslens/images/og-image.png">
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://sitharaj88.github.io/sslens/ssl-basics.html">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
+    <meta name="theme-color" content="#6750A4">
+
+    <!-- Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+
+    <!-- Bootstrap 5.3 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+    <!-- Prism.js -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">
+                <span class="logo-icon">🔐</span>
+                <span class="logo-text">SSLens</span>
+                <span class="logo-badge">Docs</span>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="getting-started.html">Getting Started</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="ssl-basics.html">SSL Basics</a></li>
+                    <li class="nav-item"><a class="nav-link" href="features.html">Features</a></li>
+                    <li class="nav-item"><a class="nav-link" href="commands.html">Commands</a></li>
+                    <li class="nav-item"><a class="nav-link" href="pinning.html">SSL Pinning</a></li>
+                    <li class="nav-item"><a class="nav-link" href="configuration.html">Configuration</a></li>
+                </ul>
+
+                <div class="nav-actions">
+                    <a href="https://github.com/sitharaj88/sslens" class="nav-github" target="_blank"
+                        rel="noopener noreferrer" aria-label="View on GitHub" title="GitHub">
+                        <i class="bi bi-github"></i>
+                    </a>
+                    <button class="theme-toggle" id="themeToggle" title="Toggle theme" aria-label="Toggle theme">
+                        <i class="bi bi-sun-fill"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="container">
+            <h1>Understanding SSL/TLS</h1>
+            <p>A comprehensive guide to the technology that powers the secure web.</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <div class="content-layout">
+            <!-- Sidebar -->
+            <aside class="content-sidebar">
+                <nav class="sidebar-nav">
+                    <h4>On This Page</h4>
+                    <ul>
+                        <li><a href="#what-is-ssl" class="active">What is SSL/TLS?</a></li>
+                        <li><a href="#how-it-works">How It Works</a></li>
+                        <li><a href="#handshake">The Handshake</a></li>
+                        <li><a href="#keys">Public vs Private Keys</a></li>
+                        <li><a href="#certificates">Anatomy of a Certificate</a></li>
+                        <li><a href="#pinning">Why Pinning Matters</a></li>
+                    </ul>
+                </nav>
+            </aside>
+
+            <!-- Content -->
+            <article class="content-main">
+                <h2 id="what-is-ssl">What is SSL/TLS?</h2>
+                <p><strong>SSL</strong> (Secure Sockets Layer) and its successor <strong>TLS</strong> (Transport Layer
+                    Security) are protocols for establishing authenticated and encrypted links between networked
+                    computers.</p>
+
+                <div class="callout callout-info">
+                    <span class="callout-icon">💡</span>
+                    <div class="callout-content">
+                        <h4>SSL vs TLS</h4>
+                        <p>Although widely known as "SSL", the actual protocol in use today is TLS (currently TLS 1.2 or
+                            1.3). SSL 3.0 was deprecated in 2015 due to security vulnerabilities. However, the term
+                            "SSL" persists in industry jargon.</p>
+                    </div>
+                </div>
+
+                <p>It solves three main problems:</p>
+                <div class="row g-4 mt-2 mb-4">
+                    <div class="col-md-4">
+                        <div class="feature-card h-100">
+                            <div class="feature-card-icon" style="font-size: 1.5rem; width: 48px; height: 48px;">🔒
+                            </div>
+                            <h3 style="font-size: 1rem;">Encryption</h3>
+                            <p style="font-size: 0.875rem;">Hides data from eavesdroppers.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="feature-card h-100">
+                            <div class="feature-card-icon" style="font-size: 1.5rem; width: 48px; height: 48px;">🆔
+                            </div>
+                            <h3 style="font-size: 1rem;">Authentication</h3>
+                            <p style="font-size: 0.875rem;">Verifies you are talking to the real server.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="feature-card h-100">
+                            <div class="feature-card-icon" style="font-size: 1.5rem; width: 48px; height: 48px;">✅</div>
+                            <h3 style="font-size: 1rem;">Integrity</h3>
+                            <p style="font-size: 0.875rem;">Ensures data hasn't been tampered with.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h2 id="how-it-works">How It Works</h2>
+                <p>SSL/TLS works using a technology called <strong>Public Key Infrastructure (PKI)</strong>. This system
+                    depends on two types of keys:</p>
+
+                <ul>
+                    <li><strong>Public Key:</strong> Can be shared with anyone. Used to encrypt data.</li>
+                    <li><strong>Private Key:</strong> Kept secret by the server. Used to decrypt data encrypted by the
+                        public key.</li>
+                </ul>
+
+                <p>Think of it like a mailbox: anyone can drop a letter in (encrypt with public key), but only the
+                    person with the key can open it (decrypt with private key).</p>
+
+                <h2 id="handshake">The Handshake</h2>
+                <p>Before any data is sent, the client (your browser/app) and the server perform a "Handshake" to
+                    negotiate security settings and authenticate the server.</p>
+
+                <div class="text-center my-5">
+                    <img src="images/ssl-handshake.png" alt="SSL/TLS Handshake Diagram"
+                        class="img-fluid rounded-4 shadow-lg border"
+                        style="border-color: var(--border-color) !important;">
+                </div>
+
+                <ol class="list-group list-group-numbered list-group-flush mb-4" style="background: transparent;">
+                    <li class="list-group-item bg-transparent text-secondary border-color-subtle"><strong>Client
+                            Hello:</strong> The client sends a message listing supported SSL/TLS versions and cipher
+                        suites.</li>
+                    <li class="list-group-item bg-transparent text-secondary border-color-subtle"><strong>Server
+                            Hello:</strong> The server chooses a cipher suite and sends its digital certificate
+                        (containing its public key).</li>
+                    <li class="list-group-item bg-transparent text-secondary border-color-subtle">
+                        <strong>Verification:</strong> The client checks if the certificate is valid, not expired, and
+                        issued by a trusted CA.</li>
+                    <li class="list-group-item bg-transparent text-secondary border-color-subtle"><strong>Key
+                            Exchange:</strong> The client generates a random "session key", encrypts it with the
+                        server's public key, and sends it back.</li>
+                    <li class="list-group-item bg-transparent text-secondary border-color-subtle"><strong>Secure
+                            Connection:</strong> The server decrypts the session key. Now both parties have the same
+                        "session key" and use it for fast symmetric encryption.</li>
+                </ol>
+
+                <h2 id="certificates">Anatomy of a Certificate</h2>
+                <p>A digital certificate (X.509) is like a passport for a website. It contains specific information that
+                    SSLens allows you to inspect:</p>
+
+                <div class="table-wrapper">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Field</th>
+                                <th>Description</th>
+                                <th>Why it matters</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Subject</strong></td>
+                                <td>Who owns the cert (CN, O, C)</td>
+                                <td>Ensures you're on <code>google.com</code>, not a fake site.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Issuer</strong></td>
+                                <td>Who verified the owner (The CA)</td>
+                                <td>Trust depends on the issuer being reliable (e.g., DigiCert, Let's Encrypt).</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Validity</strong></td>
+                                <td>Dates (Not Before / Not After)</td>
+                                <td>Certificates expire! An expired cert triggers security warnings.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>SANs</strong></td>
+                                <td>Subject Alternative Names</td>
+                                <td>Lists all other domains this single certificate protects.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Public Key</strong></td>
+                                <td>The encryption key itself</td>
+                                <td>This is what we "pin" in SSL Pinning.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="pinning">Why Pinning Matters</h2>
+                <p>In mobile development, simply trusting the system's certificate store isn't always enough. A
+                    compromised Device or CA could allow attackers to intercept traffic.</p>
+
+                <p><strong>SSL Pinning</strong> (or Certificate Pinning) hardcodes the expected certificate's
+                    "fingerprint" or "public key hash" into your app. If the server presents a certificate that doesn't
+                    match this pin, the app refuses to connect.</p>
+
+                <p>SSLens helps you generate these pins easily. Check out the <a href="pinning.html">SSL Pinning
+                        Guide</a> to learn more.</p>
+
+                <div class="callout callout-success mt-4">
+                    <span class="callout-icon">🎓</span>
+                    <div class="callout-content">
+                        <h4>Ready to inspect?</h4>
+                        <p>Now that you understand the basics, use SSLens to inspect real-world certificates and see
+                            these concepts in action.</p>
+                        <a href="getting-started.html" class="btn btn-sm btn-primary mt-2">Get Started</a>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-social justify-content-center mb-4">
+                <a href="https://github.com/sitharaj88" target="_blank" aria-label="GitHub"><i
+                        class="bi bi-github"></i></a>
+                <a href="https://linkedin.com/in/sitharaj08" target="_blank" aria-label="LinkedIn"><i
+                        class="bi bi-linkedin"></i></a>
+                <a href="https://sitharaj.in" target="_blank" aria-label="Website"><i class="bi bi-globe"></i></a>
+                <a href="https://buymeacoffee.com/sitharaj88" target="_blank" aria-label="Buy Me A Coffee"><i
+                        class="bi bi-cup-hot-fill"></i></a>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2024-2026 SSLens. Made with 💜 by <a href="https://github.com/sitharaj88"
+                        target="_blank">Sitharaj</a></p>
+                <p>Released under the <a href="https://github.com/sitharaj88/sslens/blob/main/LICENSE"
+                        target="_blank">MIT License</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- jQuery -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Prism.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+
+    <!-- Custom JS -->
+    <script src="js/main.js"></script>
+</body>
+
+</html>
