@@ -1,0 +1,30 @@
+{
+    "name": "SSLens Documentation",
+    "short_name": "SSLens Docs",
+    "description": "Modern SSL/TLS Certificate Inspector & Pinning Toolkit for VS Code",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#0D0D1A",
+    "theme_color": "#6750A4",
+    "icons": [
+        {
+            "src": "favicon.svg",
+            "sizes": "any",
+            "type": "image/svg+xml",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "images/icon-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "images/icon-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ],
+    "categories": ["developer", "utilities", "security"],
+    "lang": "en",
+    "dir": "ltr"
+}

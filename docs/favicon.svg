@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6750A4"/>
+      <stop offset="50%" style="stop-color:#9C27B0"/>
+      <stop offset="100%" style="stop-color:#E91E63"/>
+    </linearGradient>
+    <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#03DAC6"/>
+      <stop offset="100%" style="stop-color:#00BCD4"/>
+    </linearGradient>
+    <linearGradient id="lockGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFFFFF"/>
+      <stop offset="100%" style="stop-color:#D0BCFF"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background Circle -->
+  <circle cx="256" cy="256" r="240" fill="url(#bgGrad)"/>
+  
+  <!-- Outer Ring -->
+  <circle cx="256" cy="256" r="220" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="8"/>
+  
+  <!-- Shield Shape -->
+  <path d="M256 80 L400 140 L400 280 C400 360 340 420 256 450 C172 420 112 360 112 280 L112 140 Z" 
+        fill="url(#shieldGrad)" 
+        opacity="0.9"
+        filter="url(#glow)"/>
+  
+  <!-- Shield Inner -->
+  <path d="M256 100 L380 155 L380 275 C380 345 325 400 256 428 C187 400 132 345 132 275 L132 155 Z" 
+        fill="none" 
+        stroke="rgba(255,255,255,0.4)" 
+        stroke-width="4"/>
+  
+  <!-- Lock Body -->
+  <rect x="196" y="250" width="120" height="100" rx="12" fill="url(#lockGrad)" filter="url(#glow)"/>
+  
+  <!-- Lock Shackle -->
+  <path d="M220 250 L220 200 C220 168 236 145 256 145 C276 145 292 168 292 200 L292 250" 
+        fill="none" 
+        stroke="url(#lockGrad)" 
+        stroke-width="20" 
+        stroke-linecap="round"/>
+  
+  <!-- Keyhole -->
+  <circle cx="256" cy="290" r="15" fill="#6750A4"/>
+  <rect x="250" y="290" width="12" height="30" rx="4" fill="#6750A4"/>
+  
+  <!-- Checkmark -->
+  <path d="M230 200 L248 218 L285 175" 
+        fill="none" 
+        stroke="#4CAF50" 
+        stroke-width="12" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"
+        filter="url(#glow)"/>
+  
+  <!-- Decorative Dots -->
+  <circle cx="160" cy="180" r="8" fill="rgba(255,255,255,0.6)"/>
+  <circle cx="352" cy="180" r="8" fill="rgba(255,255,255,0.6)"/>
+  <circle cx="256" cy="400" r="8" fill="rgba(255,255,255,0.6)"/>
+</svg>

@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- Primary Meta Tags -->
+    <title>SSLens Features | Certificate Inspection, Export & SSL Pinning</title>
+    <meta name="title" content="SSLens Features - Complete SSL/TLS Certificate Toolkit">
+    <meta name="description"
+        content="Discover SSLens powerful features: SSL certificate inspection, chain analysis, multi-format export (PEM, DER, PKCS7), expiry monitoring, SSL pinning code generation for 6+ platforms.">
+    <meta name="keywords"
+        content="SSL certificate features, TLS inspection, certificate export, PEM format, DER format, SSL pinning, certificate chain, expiry monitoring">
+    <meta name="author" content="Sitharaj Seenivasan">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://sitharaj88.github.io/sslens/features.html">
+    <meta property="og:title" content="SSLens Features - Complete SSL/TLS Toolkit">
+    <meta property="og:description"
+        content="Explore certificate inspection, export options, SSL pinning generation, and more powerful features.">
+    <meta property="og:image" content="https://sitharaj88.github.io/sslens/images/og-image.png">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="SSLens Features">
+    <meta name="twitter:description" content="SSL certificate inspection, export, and pinning toolkit for VS Code.">
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://sitharaj88.github.io/sslens/features.html">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
+    <meta name="theme-color" content="#6750A4">
+
+    <!-- Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+
+    <!-- Bootstrap 5.3 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+    <!-- Prism.js -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">
+                <span class="logo-icon">🔐</span>
+                <span class="logo-text">SSLens</span>
+                <span class="logo-badge">Docs</span>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="getting-started.html">Getting Started</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="features.html">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="commands.html">Commands</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="pinning.html">SSL Pinning</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="configuration.html">Configuration</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="troubleshooting.html">Help</a>
+                    </li>
+                </ul>
+
+                <div class="nav-actions">
+                    <a href="https://github.com/sitharaj88/sslens" class="nav-github" target="_blank"
+                        rel="noopener noreferrer" aria-label="View on GitHub" title="GitHub">
+                        <i class="bi bi-github"></i>
+                    </a>
+                    <button class="theme-toggle" id="themeToggle" title="Toggle theme" aria-label="Toggle theme">
+                        <i class="bi bi-sun-fill"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="container">
+            <h1>Features</h1>
+            <p>Discover all the powerful capabilities of SSLens for SSL/TLS certificate management.</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <div class="content-layout">
+            <!-- Sidebar -->
+            <aside class="content-sidebar">
+                <nav class="sidebar-nav">
+                    <h4>On This Page</h4>
+                    <ul>
+                        <li><a href="#inspection" class="active">Certificate Inspection</a></li>
+                        <li><a href="#chain">Certificate Chain</a></li>
+                        <li><a href="#export">Export Options</a></li>
+                        <li><a href="#pinning">SSL Pinning</a></li>
+                        <li><a href="#monitoring">Expiry Monitoring</a></li>
+                        <li><a href="#domains">Domain Management</a></li>
+                        <li><a href="#comparison">Certificate Comparison</a></li>
+                        <li><a href="#validation">Chain Validation</a></li>
+                        <li><a href="#local">Local Certificate Files</a></li>
+                    </ul>
+                </nav>
+            </aside>
+
+            <!-- Content -->
+            <article class="content-main">
+                <h2 id="inspection">Certificate Inspection</h2>
+
+                <p>SSLens provides comprehensive SSL/TLS certificate inspection capabilities. Fetch and analyze
+                    certificates from any domain with full details.</p>
+
+                <h3>What You Can Inspect</h3>
+                <ul>
+                    <li><strong>Subject Information</strong> - Common Name (CN), Organization (O), Country (C), and
+                        other distinguished name fields</li>
+                    <li><strong>Issuer Details</strong> - Certificate Authority information including chain hierarchy
+                    </li>
+                    <li><strong>Validity Period</strong> - Not Before and Not After dates with remaining days
+                        calculation</li>
+                    <li><strong>Serial Number</strong> - Unique certificate identifier</li>
+                    <li><strong>Signature Algorithm</strong> - SHA-256, SHA-384, RSA, ECDSA, etc.</li>
+                    <li><strong>Key Information</strong> - Public key algorithm, key size, and actual key data</li>
+                    <li><strong>Extensions</strong> - Subject Alternative Names (SANs), Key Usage, Extended Key Usage,
+                        etc.</li>
+                </ul>
+
+                <h3>Custom Port Support</h3>
+                <p>SSLens supports fetching certificates from any port, not just the default HTTPS port 443:</p>
+
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span class="code-block-lang">Examples</span>
+                    </div>
+                    <pre><code class="language-text"># Default port 443
+example.com
+
+# Custom ports
+example.com:8443
+internal-api.company.com:9443
+localhost:3443</code></pre>
+                </div>
+
+                <h3>SNI Support</h3>
+                <p>Server Name Indication (SNI) is fully supported, allowing you to fetch the correct certificate from
+                    servers hosting multiple domains.</p>
+
+                <h2 id="chain">Certificate Chain</h2>
+
+                <p>View the complete certificate chain from the leaf certificate to the root Certificate Authority.</p>
+
+                <h3>Chain Information</h3>
+                <ul>
+                    <li><strong>Leaf Certificate</strong> - The domain's own certificate</li>
+                    <li><strong>Intermediate Certificates</strong> - CA certificates that sign the leaf</li>
+                    <li><strong>Root Certificate</strong> - The trusted root CA (from system trust store)</li>
+                </ul>
+
+                <p>For each certificate in the chain, you can view:</p>
+                <ul>
+                    <li>Subject and Issuer details</li>
+                    <li>Validity dates</li>
+                    <li>Fingerprints (SHA-256, SHA-1)</li>
+                    <li>Public key information</li>
+                </ul>
+
+                <div class="callout callout-info">
+                    <span class="callout-icon">💡</span>
+                    <div class="callout-content">
+                        <h4>Why Chain Matters</h4>
+                        <p>A complete certificate chain is essential for proper SSL/TLS validation. Missing intermediate
+                            certificates cause trust issues in many applications.</p>
+                    </div>
+                </div>
+
+                <h2 id="export">Export Options</h2>
+
+                <p>SSLens provides multiple export formats for certificates and cryptographic hashes.</p>
+
+                <h3>Certificate Formats</h3>
+
+                <div class="table-wrapper">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Format</th>
+                                <th>Extension</th>
+                                <th>Description</th>
+                                <th>Use Case</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>PEM</strong></td>
+                                <td>.pem, .crt</td>
+                                <td>Base64-encoded ASCII format</td>
+                                <td>Web servers, most applications</td>
+                            </tr>
+                            <tr>
+                                <td><strong>DER</strong></td>
+                                <td>.der, .cer</td>
+                                <td>Binary format</td>
+                                <td>Java applications, Windows</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>Hash Exports</h3>
+                <ul>
+                    <li><strong>SHA-256 Fingerprint</strong> - Standard certificate fingerprint</li>
+                    <li><strong>SHA-1 Fingerprint</strong> - Legacy fingerprint (not recommended for security)</li>
+                    <li><strong>MD5 Fingerprint</strong> - Legacy fingerprint (not recommended)</li>
+                    <li><strong>Public Key Hash (SHA-256 Base64)</strong> - For certificate pinning</li>
+                    <li><strong>SPKI Hash</strong> - Subject Public Key Info hash for modern pinning</li>
+                </ul>
+
+                <h2 id="pinning">SSL Pinning Code Generation</h2>
+
+                <p>Generate ready-to-use SSL pinning code for multiple platforms with a single click.</p>
+
+                <h3>Supported Platforms</h3>
+                <ul>
+                    <li><strong>Android</strong> - OkHttp, Retrofit with Kotlin/Java</li>
+                    <li><strong>iOS</strong> - URLSession, Alamofire with Swift</li>
+                    <li><strong>Flutter</strong> - Dio, http package with Dart</li>
+                    <li><strong>React Native</strong> - SSL Pinning library</li>
+                    <li><strong>Node.js</strong> - HTTPS module</li>
+                    <li><strong>Python</strong> - Requests library</li>
+                </ul>
+
+                <p>See the <a href="pinning.html">SSL Pinning Guide</a> for detailed implementation examples.</p>
+
+                <h2 id="monitoring">Expiry Monitoring</h2>
+
+                <p>SSLens provides visual indicators and alerts for certificate expiration.</p>
+
+                <h3>Visual Status Indicators</h3>
+                <ul>
+                    <li><span class="text-success"><i class="bi bi-circle-fill"></i> <strong>Green</strong></span> -
+                        Certificate is valid with more than 30 days remaining</li>
+                    <li><span class="text-warning"><i class="bi bi-circle-fill"></i> <strong>Yellow</strong></span> -
+                        Certificate expires within 30 days (warning)</li>
+                    <li><span class="text-danger"><i class="bi bi-circle-fill"></i> <strong>Red</strong></span> -
+                        Certificate is expired or expires within 7 days</li>
+                </ul>
+
+                <h3>Batch Expiry Check</h3>
+                <p>Check expiry status for all your saved domains at once:</p>
+                <ol>
+                    <li>Open Command Palette (<code>Cmd+Shift+P</code>)</li>
+                    <li>Run <strong>"SSLens: Check Certificate Expiry"</strong></li>
+                    <li>View a summary of all domains with their expiry status</li>
+                </ol>
+
+                <div class="callout callout-warning">
+                    <span class="callout-icon">⚠️</span>
+                    <div class="callout-content">
+                        <h4>Certificate Expiry</h4>
+                        <p>Expired certificates will cause connection failures and security warnings. Monitor your
+                            certificates and renew them before they expire.</p>
+                    </div>
+                </div>
+
+                <h2 id="domains">Domain Management</h2>
+
+                <p>Organize and manage your frequently accessed domains for quick certificate access.</p>
+
+                <h3>Save Domains</h3>
+                <p>Add domains to your favorites for quick access:</p>
+                <ul>
+                    <li>Use <strong>"SSLens: Save Domain to Favorites"</strong> command</li>
+                    <li>Click the ⭐ icon in the sidebar</li>
+                    <li>Right-click after fetching a certificate and select "Save to Favorites"</li>
+                </ul>
+
+                <h3>Domain Aliases</h3>
+                <p>Assign friendly names to domains for easier identification:</p>
+                <ol>
+                    <li>Right-click a saved domain in the sidebar</li>
+                    <li>Select <strong>"Edit Domain Alias"</strong></li>
+                    <li>Enter a descriptive name (e.g., "Production API", "Staging Server")</li>
+                </ol>
+
+                <h3>Import/Export Domains</h3>
+                <p>Share your domain lists between machines or team members:</p>
+                <ul>
+                    <li><strong>Export</strong> - Run "SSLens: Export Saved Domains" to save as JSON</li>
+                    <li><strong>Import</strong> - Run "SSLens: Import Saved Domains" to load from JSON</li>
+                </ul>
+
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span class="code-block-lang">JSON Export Format</span>
+                        <button class="copy-btn"><i class="bi bi-clipboard"></i> Copy</button>
+                    </div>
+                    <pre><code class="language-json">{
+  "domains": [
+    {
+      "hostname": "api.github.com",
+      "port": 443,
+      "alias": "GitHub API"
+    },
+    {
+      "hostname": "stripe.com",
+      "port": 443,
+      "alias": "Stripe Production"
+    }
+  ],
+  "exportedAt": "2026-01-25T10:30:00Z",
+  "version": "1.0.1"
+}</code></pre>
+                </div>
+
+                <h2 id="comparison">Certificate Comparison</h2>
+
+                <p>Compare certificates between different environments to identify changes or discrepancies.</p>
+
+                <h3>Use Cases</h3>
+                <ul>
+                    <li>Compare <strong>staging vs production</strong> certificates</li>
+                    <li>Verify certificate <strong>renewal</strong> by comparing old and new</li>
+                    <li>Check <strong>consistency</strong> across multiple servers</li>
+                    <li>Audit <strong>certificate changes</strong> over time</li>
+                </ul>
+
+                <h3>How to Compare</h3>
+                <ol>
+                    <li>Run <strong>"SSLens: Compare Two Certificates"</strong></li>
+                    <li>Enter the first domain (e.g., <code>staging.example.com</code>)</li>
+                    <li>Enter the second domain (e.g., <code>example.com</code>)</li>
+                    <li>View the side-by-side comparison</li>
+                </ol>
+
+                <p>The comparison shows differences in:</p>
+                <ul>
+                    <li>Subject and Issuer</li>
+                    <li>Validity dates</li>
+                    <li>Serial numbers</li>
+                    <li>Public keys and fingerprints</li>
+                    <li>Extensions and SANs</li>
+                </ul>
+
+                <h2 id="validation">Chain Validation</h2>
+
+                <p>Validate the complete certificate chain to ensure proper SSL/TLS configuration.</p>
+
+                <h3>Validation Checks</h3>
+                <ul>
+                    <li><strong>Chain Completeness</strong> - All intermediate certificates are present</li>
+                    <li><strong>Signature Verification</strong> - Each certificate is properly signed by its issuer</li>
+                    <li><strong>Expiry Validation</strong> - No certificates in the chain are expired</li>
+                    <li><strong>Trust Verification</strong> - Chain terminates at a trusted root CA</li>
+                </ul>
+
+                <h3>How to Validate</h3>
+                <ol>
+                    <li>Fetch a certificate from any domain</li>
+                    <li>Run <strong>"SSLens: Validate Certificate Chain"</strong></li>
+                    <li>View the validation results</li>
+                </ol>
+
+                <h2 id="local">Local Certificate Files</h2>
+
+                <p>Inspect certificates stored locally on your machine, not just from remote servers.</p>
+
+                <h3>Supported File Formats</h3>
+                <ul>
+                    <li><code>.pem</code> - PEM-encoded certificates</li>
+                    <li><code>.crt</code> - Certificate files</li>
+                    <li><code>.cer</code> - Certificate files (DER or PEM)</li>
+                    <li><code>.der</code> - DER-encoded binary certificates</li>
+                </ul>
+
+                <h3>How to Inspect Local Files</h3>
+                <ol>
+                    <li>Run <strong>"SSLens: Inspect Local Certificate File"</strong></li>
+                    <li>Select a certificate file from the file picker</li>
+                    <li>View the certificate details in the panel</li>
+                </ol>
+
+                <div class="callout callout-success">
+                    <span class="callout-icon">✅</span>
+                    <div class="callout-content">
+                        <h4>Self-Signed Certificates</h4>
+                        <p>SSLens can inspect self-signed certificates and certificates from internal CAs that aren't in
+                            public trust stores.</p>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>© 2024-2026 SSLens. Made with 💜 by <a href="https://github.com/sitharaj88"
+                        target="_blank">Sitharaj</a></p>
+                <p>Released under the <a href="https://github.com/sitharaj88/sslens/blob/main/LICENSE"
+                        target="_blank">MIT License</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- jQuery -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Prism.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+
+    <!-- Custom JS -->
+    <script src="js/main.js"></script>
+</body>
+
+</html>

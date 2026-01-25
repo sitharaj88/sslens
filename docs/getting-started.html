@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- Primary Meta Tags -->
+    <title>Getting Started with SSLens | Installation & Setup Guide</title>
+    <meta name="title" content="Getting Started with SSLens - Installation & Setup Guide">
+    <meta name="description"
+        content="Learn how to install and configure SSLens for VS Code. Step-by-step setup guide, quick start tutorial, and first certificate inspection walkthrough.">
+    <meta name="keywords"
+        content="SSLens installation, VS Code extension setup, SSL certificate inspector setup, TLS tool installation, developer tools">
+    <meta name="author" content="Sitharaj Seenivasan">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://sitharaj88.github.io/sslens/getting-started.html">
+    <meta property="og:title" content="Getting Started with SSLens - Installation Guide">
+    <meta property="og:description"
+        content="Step-by-step guide to install and start using SSLens for VS Code. Inspect your first SSL certificate in minutes.">
+    <meta property="og:image" content="https://sitharaj88.github.io/sslens/images/og-image.png">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Getting Started with SSLens">
+    <meta name="twitter:description" content="Install SSLens and start inspecting SSL certificates in VS Code.">
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://sitharaj88.github.io/sslens/getting-started.html">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
+    <meta name="theme-color" content="#6750A4">
+
+    <!-- Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+
+    <!-- Bootstrap 5.3 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+    <!-- Prism.js -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">
+                <span class="logo-icon">🔐</span>
+                <span class="logo-text">SSLens</span>
+                <span class="logo-badge">Docs</span>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="getting-started.html">Getting Started</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="features.html">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="commands.html">Commands</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="pinning.html">SSL Pinning</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="configuration.html">Configuration</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="troubleshooting.html">Help</a>
+                    </li>
+                </ul>
+
+                <div class="nav-actions">
+                    <a href="https://github.com/sitharaj88/sslens" class="nav-github" target="_blank"
+                        rel="noopener noreferrer" aria-label="View on GitHub" title="GitHub">
+                        <i class="bi bi-github"></i>
+                    </a>
+                    <button class="theme-toggle" id="themeToggle" title="Toggle theme" aria-label="Toggle theme">
+                        <i class="bi bi-sun-fill"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="container">
+            <h1>Getting Started</h1>
+            <p>Everything you need to install SSLens and start inspecting SSL certificates in minutes.</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <div class="content-layout">
+            <!-- Sidebar -->
+            <aside class="content-sidebar">
+                <nav class="sidebar-nav">
+                    <h4>On This Page</h4>
+                    <ul>
+                        <li><a href="#installation" class="active">Installation</a></li>
+                        <li><a href="#requirements">Requirements</a></li>
+                        <li><a href="#quick-start">Quick Start</a></li>
+                        <li><a href="#first-certificate">Your First Certificate</a></li>
+                        <li><a href="#sidebar-usage">Using the Sidebar</a></li>
+                        <li><a href="#next-steps">Next Steps</a></li>
+                    </ul>
+                </nav>
+            </aside>
+
+            <!-- Content -->
+            <article class="content-main">
+                <h2 id="installation">Installation</h2>
+
+                <h3>From VS Code Marketplace (Recommended)</h3>
+                <ol>
+                    <li>Open VS Code</li>
+                    <li>Go to the Extensions view by pressing <code>Cmd+Shift+X</code> (macOS) or
+                        <code>Ctrl+Shift+X</code> (Windows/Linux)</li>
+                    <li>Search for <strong>"SSLens"</strong></li>
+                    <li>Click the <strong>Install</strong> button</li>
+                    <li>Reload VS Code if prompted</li>
+                </ol>
+
+                <div class="callout callout-info">
+                    <span class="callout-icon">💡</span>
+                    <div class="callout-content">
+                        <h4>Pro Tip</h4>
+                        <p>You can also install directly by opening the Quick Open dialog (<code>Cmd+P</code>) and
+                            typing <code>ext install sitharaj.sslens</code></p>
+                    </div>
+                </div>
+
+                <h3>From VSIX File</h3>
+                <p>If you have a VSIX package file, you can install it directly:</p>
+
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span class="code-block-lang">Terminal</span>
+                        <button class="copy-btn"><i class="bi bi-clipboard"></i> Copy</button>
+                    </div>
+                    <pre><code class="language-bash">code --install-extension sslens-1.0.1.vsix</code></pre>
+                </div>
+
+                <p>Or install via VS Code:</p>
+                <ol>
+                    <li>Open VS Code</li>
+                    <li>Go to Extensions view (<code>Cmd+Shift+X</code>)</li>
+                    <li>Click the <strong>⋯</strong> menu at the top of the Extensions panel</li>
+                    <li>Select <strong>"Install from VSIX..."</strong></li>
+                    <li>Select your VSIX file</li>
+                </ol>
+
+                <h2 id="requirements">Requirements</h2>
+
+                <div class="table-wrapper">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Requirement</th>
+                                <th>Minimum Version</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>VS Code</td>
+                                <td>1.85.0 or higher</td>
+                            </tr>
+                            <tr>
+                                <td>Operating System</td>
+                                <td>Windows, macOS, or Linux</td>
+                            </tr>
+                            <tr>
+                                <td>Network</td>
+                                <td>Internet connection (for fetching remote certificates)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="callout callout-success">
+                    <span class="callout-icon">✅</span>
+                    <div class="callout-content">
+                        <h4>No Dependencies</h4>
+                        <p>SSLens has no external dependencies. It uses Node.js TLS APIs bundled with VS Code.</p>
+                    </div>
+                </div>
+
+                <h2 id="quick-start">Quick Start</h2>
+
+                <p>After installation, you can start using SSLens immediately. Here's the fastest way to inspect a
+                    certificate:</p>
+
+                <ol>
+                    <li>Open the <strong>Command Palette</strong> with <code>Cmd+Shift+P</code> (macOS) or
+                        <code>Ctrl+Shift+P</code> (Windows/Linux)</li>
+                    <li>Type <strong>"SSLens: Fetch Certificate from URL"</strong> and press Enter</li>
+                    <li>Enter a domain name (e.g., <code>github.com</code> or <code>api.stripe.com:443</code>)</li>
+                    <li>View the certificate details in the panel that appears</li>
+                </ol>
+
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span class="code-block-lang">Example Domains</span>
+                    </div>
+                    <pre><code class="language-text">github.com
+api.github.com
+google.com
+stripe.com:443
+example.com:8443</code></pre>
+                </div>
+
+                <h2 id="first-certificate">Your First Certificate</h2>
+
+                <p>Let's walk through fetching and inspecting your first certificate:</p>
+
+                <h3>Step 1: Fetch a Certificate</h3>
+                <ol>
+                    <li>Press <code>Cmd+Shift+P</code> to open the Command Palette</li>
+                    <li>Type <code>SSLens: Fetch</code> and select "SSLens: Fetch Certificate from URL"</li>
+                    <li>Enter <code>github.com</code> and press Enter</li>
+                </ol>
+
+                <h3>Step 2: Explore the Certificate Panel</h3>
+                <p>The certificate panel shows comprehensive information:</p>
+                <ul>
+                    <li><strong>Certificate Info</strong> - Subject, issuer, serial number</li>
+                    <li><strong>Validity</strong> - Valid from/to dates and expiry status</li>
+                    <li><strong>Fingerprints</strong> - SHA-256, SHA-1 hashes</li>
+                    <li><strong>Certificate Chain</strong> - Complete chain of trust</li>
+                    <li><strong>Public Key Info</strong> - Algorithm, key size, and public key hash</li>
+                </ul>
+
+                <h3>Step 3: Generate Pinning Code</h3>
+                <p>If you're developing a mobile app, you can generate SSL pinning code:</p>
+                <ol>
+                    <li>In the certificate panel, click <strong>"Generate Pinning Code"</strong></li>
+                    <li>Select your platform (Android, iOS, Flutter, React Native)</li>
+                    <li>Copy the generated code into your project</li>
+                </ol>
+
+                <h3>Step 4: Save the Domain</h3>
+                <p>Save frequently accessed domains for quick access:</p>
+                <ol>
+                    <li>Run <strong>"SSLens: Save Domain to Favorites"</strong> from the Command Palette</li>
+                    <li>Or click the ⭐ icon in the SSLens sidebar</li>
+                </ol>
+
+                <h2 id="sidebar-usage">Using the Sidebar</h2>
+
+                <p>SSLens adds a dedicated view in the VS Code Activity Bar:</p>
+
+                <ol>
+                    <li>Click the <strong>🛡️ shield icon</strong> in the Activity Bar (left side of VS Code)</li>
+                    <li>You'll see two sections:
+                        <ul>
+                            <li><strong>Saved Domains</strong> - Your favorite domains for quick access</li>
+                            <li><strong>Recent Certificates</strong> - Recently fetched certificates</li>
+                        </ul>
+                    </li>
+                </ol>
+
+                <h3>Sidebar Actions</h3>
+                <ul>
+                    <li><strong>Click a domain</strong> - Fetch and display its certificate</li>
+                    <li><strong>Right-click a domain</strong> - Access context menu (remove, edit alias, etc.)</li>
+                    <li><strong>Click the + icon</strong> - Add a new domain to favorites</li>
+                    <li><strong>Click the refresh icon</strong> - Refresh all saved domains</li>
+                </ul>
+
+                <h2 id="next-steps">Next Steps</h2>
+
+                <p>Now that you have SSLens installed and working, explore these topics:</p>
+
+                <div class="row g-3 mt-4">
+                    <div class="col-md-6">
+                        <a href="features.html" class="doc-card">
+                            <div class="doc-card-icon">✨</div>
+                            <h3>Explore Features</h3>
+                            <p>Learn about all the powerful features SSLens offers.</p>
+                            <span class="doc-card-link">View features <i class="bi bi-arrow-right"></i></span>
+                        </a>
+                    </div>
+                    <div class="col-md-6">
+                        <a href="commands.html" class="doc-card">
+                            <div class="doc-card-icon">⌨️</div>
+                            <h3>Commands Reference</h3>
+                            <p>Complete list of all available commands.</p>
+                            <span class="doc-card-link">View commands <i class="bi bi-arrow-right"></i></span>
+                        </a>
+                    </div>
+                    <div class="col-md-6">
+                        <a href="pinning.html" class="doc-card">
+                            <div class="doc-card-icon">📌</div>
+                            <h3>SSL Pinning Guide</h3>
+                            <p>Implement SSL pinning in your mobile apps.</p>
+                            <span class="doc-card-link">Learn pinning <i class="bi bi-arrow-right"></i></span>
+                        </a>
+                    </div>
+                    <div class="col-md-6">
+                        <a href="configuration.html" class="doc-card">
+                            <div class="doc-card-icon">⚙️</div>
+                            <h3>Configuration</h3>
+                            <p>Customize SSLens to fit your workflow.</p>
+                            <span class="doc-card-link">Configure <i class="bi bi-arrow-right"></i></span>
+                        </a>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>© 2024-2026 SSLens. Made with 💜 by <a href="https://github.com/sitharaj88"
+                        target="_blank">Sitharaj</a></p>
+                <p>Released under the <a href="https://github.com/sitharaj88/sslens/blob/main/LICENSE"
+                        target="_blank">MIT License</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- jQuery -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Prism.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+
+    <!-- Custom JS -->
+    <script src="js/main.js"></script>
+</body>
+
+</html>

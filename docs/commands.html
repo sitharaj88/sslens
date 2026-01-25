@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- Primary Meta Tags -->
+    <title>SSLens Commands Reference | Complete Command List & Shortcuts</title>
+    <meta name="title" content="SSLens Commands Reference - All VS Code Commands">
+    <meta name="description"
+        content="Complete reference of all 15+ SSLens commands for VS Code. Fetch certificates, export formats, generate SSL pinning code, manage domains, and more with keyboard shortcuts.">
+    <meta name="keywords"
+        content="SSLens commands, VS Code commands, SSL certificate commands, keyboard shortcuts, fetch certificate, export PEM, SSL pinning commands">
+    <meta name="author" content="Sitharaj Seenivasan">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://sitharaj88.github.io/sslens/commands.html">
+    <meta property="og:title" content="SSLens Commands Reference">
+    <meta property="og:description"
+        content="Complete list of all SSLens VS Code commands with usage examples and shortcuts.">
+    <meta property="og:image" content="https://sitharaj88.github.io/sslens/images/og-image.png">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="SSLens Commands Reference">
+    <meta name="twitter:description" content="All SSLens commands for certificate inspection and export.">
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://sitharaj88.github.io/sslens/commands.html">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
+    <meta name="theme-color" content="#6750A4">
+
+    <!-- Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+
+    <!-- Bootstrap 5.3 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+    <!-- Prism.js -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">
+                <span class="logo-icon">🔐</span>
+                <span class="logo-text">SSLens</span>
+                <span class="logo-badge">Docs</span>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="getting-started.html">Getting Started</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="features.html">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="commands.html">Commands</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="pinning.html">SSL Pinning</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="configuration.html">Configuration</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="troubleshooting.html">Help</a>
+                    </li>
+                </ul>
+
+                <div class="nav-actions">
+                    <a href="https://github.com/sitharaj88/sslens" class="nav-github" target="_blank"
+                        rel="noopener noreferrer" aria-label="View on GitHub" title="GitHub">
+                        <i class="bi bi-github"></i>
+                    </a>
+                    <button class="theme-toggle" id="themeToggle" title="Toggle theme" aria-label="Toggle theme">
+                        <i class="bi bi-sun-fill"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="container">
+            <h1>Commands Reference</h1>
+            <p>Complete list of all SSLens commands with detailed descriptions and usage instructions.</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <div class="content-layout">
+            <!-- Sidebar -->
+            <aside class="content-sidebar">
+                <nav class="sidebar-nav">
+                    <h4>Command Categories</h4>
+                    <ul>
+                        <li><a href="#fetching" class="active">Certificate Fetching</a></li>
+                        <li><a href="#export">Export & Copy</a></li>
+                        <li><a href="#pinning">Pinning Code</a></li>
+                        <li><a href="#domain">Domain Management</a></li>
+                        <li><a href="#analysis">Analysis & Validation</a></li>
+                        <li><a href="#shortcuts">Keyboard Shortcuts</a></li>
+                    </ul>
+                </nav>
+            </aside>
+
+            <!-- Content -->
+            <article class="content-main">
+                <div class="callout callout-info">
+                    <span class="callout-icon">💡</span>
+                    <div class="callout-content">
+                        <h4>Accessing Commands</h4>
+                        <p>All commands can be accessed via the Command Palette. Press <code>Cmd+Shift+P</code> (macOS)
+                            or <code>Ctrl+Shift+P</code> (Windows/Linux) and type "SSLens" to see all available
+                            commands.</p>
+                    </div>
+                </div>
+
+                <h2 id="fetching">Certificate Fetching</h2>
+
+                <div class="table-wrapper">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Command</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>SSLens: Fetch Certificate from URL</code></td>
+                                <td>Fetches an SSL certificate from a remote domain. Prompts for the domain name and
+                                    optional port number. Displays the certificate details in a new panel.</td>
+                            </tr>
+                            <tr>
+                                <td><code>SSLens: Inspect Local Certificate File</code></td>
+                                <td>Opens a file picker to select a local certificate file (.pem, .crt, .cer, .der) and
+                                    displays its details.</td>
+                            </tr>
+                            <tr>
+                                <td><code>SSLens: Bulk Fetch Certificates</code></td>
+                                <td>Fetches certificates from multiple domains at once. Enter domains separated by
+                                    newlines or commas. Shows a summary view of all certificates.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3 id="fetch">Fetch Certificate from URL</h3>
+                <p>This is the primary command for fetching SSL certificates. It supports:</p>
+                <ul>
+                    <li><strong>Simple domains:</strong> <code>github.com</code></li>
+                    <li><strong>Subdomains:</strong> <code>api.github.com</code></li>
+                    <li><strong>Custom ports:</strong> <code>example.com:8443</code></li>
+                    <li><strong>Full URLs:</strong> <code>https://api.github.com/v1/users</code> (domain is extracted)
+                    </li>
+                </ul>
+
+                <h2 id="export">Export & Copy Commands</h2>
+
+                <div class="table-wrapper">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Command</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>SSLens: Export as PEM</code></td>
+                                <td>Exports the current certificate in PEM format. Opens a save dialog to choose the
+                                    destination file.</td>
+                            </tr>
+                            <tr>
+                                <td><code>SSLens: Export as DER</code></td>
+                                <td>Exports the current certificate in binary DER format. Useful for Java applications
+                                    and Windows.</td>
+                            </tr>
+                            <tr>
+                                <td><code>SSLens: Copy Public Key Hash (SHA-256)</code></td>
+                                <td>Copies the Base64-encoded SHA-256 hash of the public key to clipboard. Used for SSL
+                                    pinning.</td>
+                            </tr>
+                            <tr>
+                                <td><code>SSLens: Copy SPKI Hash</code></td>
+                                <td>Copies the Subject Public Key Info hash to clipboard. Modern pinning format.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>Export Formats Explained</h3>
+                <p><strong>PEM (Privacy Enhanced Mail):</strong> Base64-encoded ASCII format, the most common
+                    certificate format. Used by Apache, nginx, and most other servers.</p>
+                <p><strong>DER (Distinguished Encoding Rules):</strong> Binary format commonly used in Java environments
+                    and Windows certificate stores.</p>
+
+                <h2 id="pinning">Pinning Code Commands</h2>
+
+                <div class="table-wrapper">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Command</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>SSLens: Generate Pinning Code</code></td>
+                                <td>Generates SSL pinning code for the current certificate. Prompts to select a platform
+                                    (Android, iOS, Flutter, React Native, etc.) and displays the ready-to-use code.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>Supported Platforms</h3>
+                <p>When you run the pinning code generator, you can choose from:</p>
+                <ul>
+                    <li><strong>Android (OkHttp/Retrofit)</strong> - Kotlin code with CertificatePinner</li>
+                    <li><strong>Android (Network Security Config)</strong> - XML configuration file</li>
+                    <li><strong>iOS (URLSession)</strong> - Swift delegate implementation</li>
+                    <li><strong>iOS (Alamofire)</strong> - ServerTrustManager configuration</li>
+                    <li><strong>Flutter (Dio)</strong> - Dart with BadCertificateCallback</li>
+                    <li><strong>React Native</strong> - SSL pinning library configuration</li>
+                    <li><strong>Node.js</strong> - HTTPS agent with checkServerIdentity</li>
+                    <li><strong>Python (Requests)</strong> - Session with certificate verification</li>
+                </ul>
+
+                <h2 id="domain">Domain Management Commands</h2>
+
+                <div class="table-wrapper">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Command</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>SSLens: Save Domain to Favorites</code></td>
+                                <td>Adds the current domain to saved favorites for quick access from the sidebar.</td>
+                            </tr>
+                            <tr>
+                                <td><code>SSLens: Remove Domain from Favorites</code></td>
+                                <td>Removes a domain from the saved favorites list.</td>
+                            </tr>
+                            <tr>
+                                <td><code>SSLens: Refresh Saved Domains</code></td>
+                                <td>Refreshes the certificate information for all saved domains.</td>
+                            </tr>
+                            <tr>
+                                <td><code>SSLens: Edit Domain Alias</code></td>
+                                <td>Sets a friendly name/alias for a saved domain (e.g., "Production API").</td>
+                            </tr>
+                            <tr>
+                                <td><code>SSLens: Export Saved Domains</code></td>
+                                <td>Exports all saved domains to a JSON file for backup or sharing.</td>
+                            </tr>
+                            <tr>
+                                <td><code>SSLens: Import Saved Domains</code></td>
+                                <td>Imports domains from a previously exported JSON file.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="analysis">Analysis & Validation Commands</h2>
+
+                <div class="table-wrapper">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Command</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>SSLens: Check Certificate Expiry</code></td>
+                                <td>Checks the expiration status of saved domains. Shows remaining days and warning
+                                    indicators for expiring certificates.</td>
+                            </tr>
+                            <tr>
+                                <td><code>SSLens: Compare Two Certificates</code></td>
+                                <td>Compares certificates from two different domains side-by-side. Useful for comparing
+                                    staging vs production environments.</td>
+                            </tr>
+                            <tr>
+                                <td><code>SSLens: Validate Certificate Chain</code></td>
+                                <td>Validates the complete certificate chain, checking for proper signing, expiry, and
+                                    trust chain integrity.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>Expiry Status Indicators</h3>
+                <p>The expiry check shows visual indicators:</p>
+                <ul>
+                    <li><span class="text-success"><i class="bi bi-circle-fill"></i></span> <strong>Valid</strong> -
+                        More than 30 days remaining</li>
+                    <li><span class="text-warning"><i class="bi bi-circle-fill"></i></span> <strong>Warning</strong> -
+                        Less than 30 days remaining</li>
+                    <li><span class="text-danger"><i class="bi bi-circle-fill"></i></span>
+                        <strong>Critical/Expired</strong> - Less than 7 days or already expired</li>
+                </ul>
+
+                <h2 id="shortcuts">Keyboard Shortcuts</h2>
+
+                <p>SSLens doesn't define default keyboard shortcuts to avoid conflicts with other extensions. However,
+                    you can easily add custom shortcuts:</p>
+
+                <h3>Adding Custom Shortcuts</h3>
+                <ol>
+                    <li>Open Keyboard Shortcuts (<code>Cmd+K Cmd+S</code> on macOS)</li>
+                    <li>Search for "SSLens"</li>
+                    <li>Click the + icon next to any command</li>
+                    <li>Press your desired key combination</li>
+                </ol>
+
+                <h3>Recommended Shortcuts</h3>
+                <p>Here are some suggested shortcuts for common commands:</p>
+
+                <div class="table-wrapper">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Command</th>
+                                <th>Suggested Shortcut (macOS)</th>
+                                <th>Suggested Shortcut (Windows)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Fetch Certificate from URL</td>
+                                <td><code>Cmd+Shift+S Cmd+F</code></td>
+                                <td><code>Ctrl+Shift+S Ctrl+F</code></td>
+                            </tr>
+                            <tr>
+                                <td>Generate Pinning Code</td>
+                                <td><code>Cmd+Shift+S Cmd+P</code></td>
+                                <td><code>Ctrl+Shift+S Ctrl+P</code></td>
+                            </tr>
+                            <tr>
+                                <td>Copy Public Key Hash</td>
+                                <td><code>Cmd+Shift+S Cmd+C</code></td>
+                                <td><code>Ctrl+Shift+S Ctrl+C</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>keybindings.json Example</h3>
+                <p>Add these to your keybindings.json file:</p>
+
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span class="code-block-lang">JSON</span>
+                        <button class="copy-btn"><i class="bi bi-clipboard"></i> Copy</button>
+                    </div>
+                    <pre><code class="language-json">[
+    {
+        "key": "cmd+shift+s cmd+f",
+        "command": "sslens.fetchCertificate",
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "cmd+shift+s cmd+p",
+        "command": "sslens.generatePinningCode"
+    },
+    {
+        "key": "cmd+shift+s cmd+c",
+        "command": "sslens.copyPublicKeyHash"
+    }
+]</code></pre>
+                </div>
+            </article>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>© 2024-2026 SSLens. Made with 💜 by <a href="https://github.com/sitharaj88"
+                        target="_blank">Sitharaj</a></p>
+                <p>Released under the <a href="https://github.com/sitharaj88/sslens/blob/main/LICENSE"
+                        target="_blank">MIT License</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- jQuery -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Prism.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+
+    <!-- Custom JS -->
+    <script src="js/main.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- Primary Meta Tags -->
+    <title>SSL Pinning Implementation Guide | Android, iOS, Flutter, React Native</title>
+    <meta name="title" content="SSL Pinning Guide - Android, iOS, Flutter, React Native, Node.js, Python">
+    <meta name="description"
+        content="Complete SSL certificate pinning implementation guide with ready-to-use code for Android (OkHttp), iOS (Swift), Flutter, React Native, Node.js, and Python. Secure your mobile apps against MITM attacks.">
+    <meta name="keywords"
+        content="SSL pinning, certificate pinning, Android SSL pinning, iOS certificate pinning, Flutter SSL, React Native security, OkHttp pinning, MITM protection, mobile app security">
+    <meta name="author" content="Sitharaj Seenivasan">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://sitharaj88.github.io/sslens/pinning.html">
+    <meta property="og:title" content="SSL Pinning Implementation Guide">
+    <meta property="og:description"
+        content="Implement SSL pinning in Android, iOS, Flutter, React Native, Node.js, and Python with ready-to-use code examples.">
+    <meta property="og:image" content="https://sitharaj88.github.io/sslens/images/og-image.png">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="SSL Pinning Guide for Mobile & Web">
+    <meta name="twitter:description" content="Secure your apps with SSL pinning. Code examples for 6+ platforms.">
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://sitharaj88.github.io/sslens/pinning.html">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
+    <meta name="theme-color" content="#6750A4">
+
+    <!-- Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+
+    <!-- Bootstrap 5.3 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+    <!-- Prism.js -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">
+                <span class="logo-icon">🔐</span>
+                <span class="logo-text">SSLens</span>
+                <span class="logo-badge">Docs</span>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="getting-started.html">Getting Started</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="features.html">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="commands.html">Commands</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="pinning.html">SSL Pinning</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="configuration.html">Configuration</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="troubleshooting.html">Help</a>
+                    </li>
+                </ul>
+
+                <div class="nav-actions">
+                    <a href="https://github.com/sitharaj88/sslens" class="nav-github" target="_blank"
+                        rel="noopener noreferrer" aria-label="View on GitHub" title="GitHub">
+                        <i class="bi bi-github"></i>
+                    </a>
+                    <button class="theme-toggle" id="themeToggle" title="Toggle theme" aria-label="Toggle theme">
+                        <i class="bi bi-sun-fill"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="container">
+            <h1>SSL Pinning Guide</h1>
+            <p>Complete implementation guide for SSL certificate pinning across all major mobile platforms.</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <div class="content-layout">
+            <!-- Sidebar -->
+            <aside class="content-sidebar">
+                <nav class="sidebar-nav">
+                    <h4>Platforms</h4>
+                    <ul>
+                        <li><a href="#overview" class="active">Overview</a></li>
+                        <li><a href="#android">Android</a></li>
+                        <li><a href="#ios">iOS</a></li>
+                        <li><a href="#flutter">Flutter</a></li>
+                        <li><a href="#react-native">React Native</a></li>
+                        <li><a href="#nodejs">Node.js</a></li>
+                        <li><a href="#python">Python</a></li>
+                        <li><a href="#best-practices">Best Practices</a></li>
+                    </ul>
+                </nav>
+            </aside>
+
+            <!-- Content -->
+            <article class="content-main">
+                <h2 id="overview">What is SSL Pinning?</h2>
+
+                <p>SSL Certificate Pinning is a security technique that associates a host with its expected X.509
+                    certificate or public key. Once a certificate or public key is known or "pinned" to a host, the app
+                    will reject connections to that host if the certificate doesn't match.</p>
+
+                <h3>Why Use SSL Pinning?</h3>
+                <ul>
+                    <li><strong>Prevent Man-in-the-Middle Attacks</strong> - Attackers can't intercept traffic even with
+                        a forged CA certificate</li>
+                    <li><strong>Enhanced Security</strong> - Goes beyond standard TLS verification</li>
+                    <li><strong>Compliance</strong> - Required by many security standards (PCI-DSS, HIPAA)</li>
+                    <li><strong>Trust Assurance</strong> - Only trust certificates you explicitly approve</li>
+                </ul>
+
+                <h3>Pinning Approaches</h3>
+                <div class="table-wrapper">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Approach</th>
+                                <th>Pros</th>
+                                <th>Cons</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Certificate Pinning</strong></td>
+                                <td>Simple to implement</td>
+                                <td>Requires app update when certificate changes</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Public Key Pinning</strong></td>
+                                <td>Survives certificate renewal (if key unchanged)</td>
+                                <td>Slightly more complex</td>
+                            </tr>
+                            <tr>
+                                <td><strong>SPKI Hash Pinning</strong></td>
+                                <td>Modern approach, stable across renewals</td>
+                                <td>Requires hash calculation</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="callout callout-warning">
+                    <span class="callout-icon">⚠️</span>
+                    <div class="callout-content">
+                        <h4>Important: Always Include Backup Pins</h4>
+                        <p>Always include at least one backup pin (intermediate CA or backup public key) to avoid
+                            locking users out of your app if the certificate changes unexpectedly.</p>
+                    </div>
+                </div>
+
+                <h2 id="android">Android (Kotlin/Java)</h2>
+
+                <h3>Option 1: OkHttp CertificatePinner</h3>
+                <p>This is the most common approach for Android apps using OkHttp or Retrofit.</p>
+
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span class="code-block-lang">Kotlin</span>
+                        <button class="copy-btn"><i class="bi bi-clipboard"></i> Copy</button>
+                    </div>
+                    <pre><code class="language-kotlin">import okhttp3.CertificatePinner
+import okhttp3.OkHttpClient
+
+val certificatePinner = CertificatePinner.Builder()
+    .add("api.example.com", "sha256/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=")
+    // Add backup pin for certificate rotation
+    .add("api.example.com", "sha256/BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB=")
+    .build()
+
+val client = OkHttpClient.Builder()
+    .certificatePinner(certificatePinner)
+    .build()
+
+// Use with Retrofit
+val retrofit = Retrofit.Builder()
+    .baseUrl("https://api.example.com/")
+    .client(client)
+    .addConverterFactory(GsonConverterFactory.create())
+    .build()</code></pre>
+                </div>
+
+                <h3>Option 2: Network Security Config (Android 7.0+)</h3>
+                <p>XML-based configuration that doesn't require code changes.</p>
+
+                <p><strong>1. Create <code>res/xml/network_security_config.xml</code>:</strong></p>
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span class="code-block-lang">XML</span>
+                        <button class="copy-btn"><i class="bi bi-clipboard"></i> Copy</button>
+                    </div>
+                    <pre><code class="language-xml">&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;network-security-config&gt;
+    &lt;domain-config cleartextTrafficPermitted="false"&gt;
+        &lt;domain includeSubdomains="true"&gt;api.example.com&lt;/domain&gt;
+        &lt;pin-set expiration="2025-12-31"&gt;
+            &lt;pin digest="SHA-256"&gt;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=&lt;/pin&gt;
+            &lt;!-- Backup pin --&gt;
+            &lt;pin digest="SHA-256"&gt;BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB=&lt;/pin&gt;
+        &lt;/pin-set&gt;
+    &lt;/domain-config&gt;
+&lt;/network-security-config&gt;</code></pre>
+                </div>
+
+                <p><strong>2. Reference in <code>AndroidManifest.xml</code>:</strong></p>
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span class="code-block-lang">XML</span>
+                        <button class="copy-btn"><i class="bi bi-clipboard"></i> Copy</button>
+                    </div>
+                    <pre><code class="language-xml">&lt;application
+    android:networkSecurityConfig="@xml/network_security_config"
+    ...&gt;
+&lt;/application&gt;</code></pre>
+                </div>
+
+                <h2 id="ios">iOS (Swift)</h2>
+
+                <h3>Option 1: URLSession Delegate</h3>
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span class="code-block-lang">Swift</span>
+                        <button class="copy-btn"><i class="bi bi-clipboard"></i> Copy</button>
+                    </div>
+                    <pre><code class="language-swift">import Foundation
+import CryptoKit
+
+class SSLPinningDelegate: NSObject, URLSessionDelegate {
+    
+    private let pinnedHashes: Set&lt;String&gt; = [
+        "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=", // Primary
+        "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB="  // Backup
+    ]
+    
+    func urlSession(
+        _ session: URLSession,
+        didReceive challenge: URLAuthenticationChallenge,
+        completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
+    ) {
+        guard challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
+              let serverTrust = challenge.protectionSpace.serverTrust else {
+            completionHandler(.cancelAuthenticationChallenge, nil)
+            return
+        }
+        
+        // Validate the certificate chain
+        var error: CFError?
+        guard SecTrustEvaluateWithError(serverTrust, &amp;error) else {
+            completionHandler(.cancelAuthenticationChallenge, nil)
+            return
+        }
+        
+        // Check public key hash
+        let certificateCount = SecTrustGetCertificateCount(serverTrust)
+        for index in 0..&lt;certificateCount {
+            guard let certificate = SecTrustGetCertificateAtIndex(serverTrust, index),
+                  let publicKey = SecCertificateCopyKey(certificate),
+                  let publicKeyData = SecKeyCopyExternalRepresentation(publicKey, nil) as Data? else {
+                continue
+            }
+            
+            let hash = SHA256.hash(data: publicKeyData)
+            let hashString = Data(hash).base64EncodedString()
+            
+            if pinnedHashes.contains(hashString) {
+                completionHandler(.useCredential, URLCredential(trust: serverTrust))
+                return
+            }
+        }
+        
+        completionHandler(.cancelAuthenticationChallenge, nil)
+    }
+}
+
+// Usage
+let delegate = SSLPinningDelegate()
+let session = URLSession(configuration: .default, delegate: delegate, delegateQueue: nil)</code></pre>
+                </div>
+
+                <h3>Option 2: Alamofire ServerTrustManager</h3>
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span class="code-block-lang">Swift</span>
+                        <button class="copy-btn"><i class="bi bi-clipboard"></i> Copy</button>
+                    </div>
+                    <pre><code class="language-swift">import Alamofire
+
+let pinnedCertificates: [SecCertificate] = {
+    let url = Bundle.main.url(forResource: "api.example.com", withExtension: "cer")!
+    let data = try! Data(contentsOf: url)
+    return [SecCertificateCreateWithData(nil, data as CFData)!]
+}()
+
+let evaluators: [String: ServerTrustEvaluating] = [
+    "api.example.com": PinnedCertificatesTrustEvaluator(certificates: pinnedCertificates)
+]
+
+let manager = ServerTrustManager(evaluators: evaluators)
+let session = Session(serverTrustManager: manager)
+
+// Make requests
+session.request("https://api.example.com/endpoint").responseJSON { response in
+    // Handle response
+}</code></pre>
+                </div>
+
+                <h2 id="flutter">Flutter (Dart)</h2>
+
+                <h3>Using Dio with BadCertificateCallback</h3>
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span class="code-block-lang">Dart</span>
+                        <button class="copy-btn"><i class="bi bi-clipboard"></i> Copy</button>
+                    </div>
+                    <pre><code class="language-dart">import 'dart:io';
+import 'dart:convert';
+import 'package:dio/dio.dart';
+import 'package:dio/io.dart';
+import 'package:crypto/crypto.dart';
+
+class SecureHttpClient {
+  static final List&lt;String&gt; _pinnedHashes = [
+    'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=', // Primary
+    'BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB=', // Backup
+  ];
+
+  static Dio createSecureDio() {
+    final dio = Dio(BaseOptions(
+      baseUrl: 'https://api.example.com',
+      connectTimeout: const Duration(seconds: 30),
+      receiveTimeout: const Duration(seconds: 30),
+    ));
+
+    dio.httpClientAdapter = IOHttpClientAdapter(
+      createHttpClient: () {
+        final client = HttpClient();
+        client.badCertificateCallback = (cert, host, port) {
+          // Calculate hash of the certificate
+          final certDer = cert.der;
+          final hash = sha256.convert(certDer);
+          final hashBase64 = base64Encode(hash.bytes);
+          
+          // Check if hash matches any pinned hash
+          return _pinnedHashes.contains(hashBase64);
+        };
+        return client;
+      },
+    );
+
+    return dio;
+  }
+}
+
+// Usage
+final dio = SecureHttpClient.createSecureDio();
+final response = await dio.get('/api/data');</code></pre>
+                </div>
+
+                <h2 id="react-native">React Native</h2>
+
+                <h3>Using react-native-ssl-pinning</h3>
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span class="code-block-lang">JavaScript</span>
+                        <button class="copy-btn"><i class="bi bi-clipboard"></i> Copy</button>
+                    </div>
+                    <pre><code class="language-javascript">import { fetch } from 'react-native-ssl-pinning';
+
+// Using certificate file (place in android/app/src/main/assets/)
+const fetchWithCertPin = async () => {
+  try {
+    const response = await fetch('https://api.example.com/data', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      sslPinning: {
+        certs: ['api_example_com'], // Certificate file name without extension
+      },
+    });
+    
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('SSL Pinning Error:', error);
+    throw error;
+  }
+};
+
+// Using public key hash
+const fetchWithHashPin = async () => {
+  try {
+    const response = await fetch('https://api.example.com/data', {
+      method: 'GET',
+      sslPinning: {
+        certs: ['sha256/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA='],
+      },
+    });
+    
+    return await response.json();
+  } catch (error) {
+    console.error('SSL Pinning Error:', error);
+    throw error;
+  }
+};</code></pre>
+                </div>
+
+                <h2 id="nodejs">Node.js</h2>
+
+                <h3>Using HTTPS Agent</h3>
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span class="code-block-lang">JavaScript</span>
+                        <button class="copy-btn"><i class="bi bi-clipboard"></i> Copy</button>
+                    </div>
+                    <pre><code class="language-javascript">const https = require('https');
+const crypto = require('crypto');
+
+const PINNED_HASHES = [
+  'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=', // Primary
+  'BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB=', // Backup
+];
+
+const agent = new https.Agent({
+  checkServerIdentity: (host, cert) => {
+    // Get the public key hash
+    const publicKey = cert.pubkey;
+    const hash = crypto.createHash('sha256').update(publicKey).digest('base64');
+    
+    if (!PINNED_HASHES.includes(hash)) {
+      throw new Error(`Certificate pin mismatch for ${host}. Got: ${hash}`);
+    }
+    
+    // Return undefined to indicate success
+    return undefined;
+  },
+});
+
+// Using with native https
+https.get('https://api.example.com/data', { agent }, (res) => {
+  // Handle response
+});
+
+// Using with axios
+const axios = require('axios');
+const client = axios.create({
+  httpsAgent: agent,
+});
+
+await client.get('https://api.example.com/data');</code></pre>
+                </div>
+
+                <h2 id="python">Python</h2>
+
+                <h3>Using Requests with Certificate Verification</h3>
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span class="code-block-lang">Python</span>
+                        <button class="copy-btn"><i class="bi bi-clipboard"></i> Copy</button>
+                    </div>
+                    <pre><code class="language-python">import requests
+import hashlib
+import base64
+from requests.adapters import HTTPAdapter
+from urllib3.util.ssl_ import create_urllib3_context
+
+PINNED_HASHES = [
+    'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=',  # Primary
+    'BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB=',  # Backup
+]
+
+
+class PinningAdapter(HTTPAdapter):
+    def __init__(self, *args, **kwargs):
+        self.pinned_hashes = kwargs.pop('pinned_hashes', [])
+        super().__init__(*args, **kwargs)
+
+    def send(self, request, *args, **kwargs):
+        response = super().send(request, *args, **kwargs)
+        
+        # Get the peer certificate
+        sock = response.raw._connection.sock
+        cert_der = sock.getpeercert(binary_form=True)
+        
+        # Calculate SHA-256 hash
+        cert_hash = base64.b64encode(hashlib.sha256(cert_der).digest()).decode()
+        
+        if cert_hash not in self.pinned_hashes:
+            raise Exception(f'Certificate pin mismatch! Got: {cert_hash}')
+        
+        return response
+
+
+# Usage
+session = requests.Session()
+session.mount('https://api.example.com', PinningAdapter(pinned_hashes=PINNED_HASHES))
+
+response = session.get('https://api.example.com/data')
+print(response.json())</code></pre>
+                </div>
+
+                <h2 id="best-practices">Best Practices</h2>
+
+                <h3>1. Always Include Backup Pins</h3>
+                <p>Never ship your app with only one pin. If the certificate changes and you have no backup, users will
+                    be locked out until they update.</p>
+
+                <h3>2. Pin the Public Key, Not the Certificate</h3>
+                <p>Public key pinning is more resilient to certificate renewals, as long as the key pair remains the
+                    same.</p>
+
+                <h3>3. Consider Pinning the Intermediate CA</h3>
+                <p>Pinning an intermediate CA provides a balance between security and operational flexibility.</p>
+
+                <h3>4. Implement Certificate Rotation Strategy</h3>
+                <ul>
+                    <li>Generate backup key pairs before you need them</li>
+                    <li>Add the backup public key hash to your app before rotating</li>
+                    <li>Wait for users to update before removing old pins</li>
+                </ul>
+
+                <h3>5. Monitor for Pinning Failures</h3>
+                <p>Implement reporting for pinning failures to detect potential attacks or misconfigurations.</p>
+
+                <h3>6. Set Pin Expiration (Android)</h3>
+                <p>Use the <code>expiration</code> attribute in Network Security Config to fail open if pins expire.</p>
+
+                <div class="callout callout-success">
+                    <span class="callout-icon">✅</span>
+                    <div class="callout-content">
+                        <h4>SSLens Makes It Easy</h4>
+                        <p>Use SSLens to quickly get the correct public key hashes for your domains. The generated code
+                            includes backup pin placeholders to remind you to add them.</p>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>© 2024-2026 SSLens. Made with 💜 by <a href="https://github.com/sitharaj88"
+                        target="_blank">Sitharaj</a></p>
+                <p>Released under the <a href="https://github.com/sitharaj88/sslens/blob/main/LICENSE"
+                        target="_blank">MIT License</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- jQuery -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Prism.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-kotlin.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-swift.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-dart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
+
+    <!-- Custom JS -->
+    <script src="js/main.js"></script>
+</body>
+
+</html>

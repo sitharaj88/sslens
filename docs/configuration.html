@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- Primary Meta Tags -->
+    <title>SSLens Configuration | Settings & Customization Guide</title>
+    <meta name="title" content="SSLens Configuration - VS Code Settings Guide">
+    <meta name="description"
+        content="Configure SSLens settings in VS Code. Customize connection timeout, default ports, certificate expiry warnings, export preferences, and more options.">
+    <meta name="keywords"
+        content="SSLens settings, VS Code configuration, SSL timeout, certificate expiry warning, extension settings, customization">
+    <meta name="author" content="Sitharaj Seenivasan">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://sitharaj88.github.io/sslens/configuration.html">
+    <meta property="og:title" content="SSLens Configuration Guide">
+    <meta property="og:description"
+        content="Customize SSLens settings for your workflow. Timeout, ports, expiry warnings, and more.">
+    <meta property="og:image" content="https://sitharaj88.github.io/sslens/images/og-image.png">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="SSLens Configuration">
+    <meta name="twitter:description" content="Customize SSLens for your VS Code workflow.">
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://sitharaj88.github.io/sslens/configuration.html">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
+    <meta name="theme-color" content="#6750A4">
+
+    <!-- Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+
+    <!-- Bootstrap 5.3 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+    <!-- Prism.js -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">
+                <span class="logo-icon">🔐</span>
+                <span class="logo-text">SSLens</span>
+                <span class="logo-badge">Docs</span>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="getting-started.html">Getting Started</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="features.html">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="commands.html">Commands</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="pinning.html">SSL Pinning</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="configuration.html">Configuration</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="troubleshooting.html">Help</a>
+                    </li>
+                </ul>
+
+                <div class="nav-actions">
+                    <a href="https://github.com/sitharaj88/sslens" class="nav-github" target="_blank"
+                        rel="noopener noreferrer" aria-label="View on GitHub" title="GitHub">
+                        <i class="bi bi-github"></i>
+                    </a>
+                    <button class="theme-toggle" id="themeToggle" title="Toggle theme" aria-label="Toggle theme">
+                        <i class="bi bi-sun-fill"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="container">
+            <h1>Configuration</h1>
+            <p>Customize SSLens settings to fit your workflow and preferences.</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <div class="content-layout">
+            <!-- Sidebar -->
+            <aside class="content-sidebar">
+                <nav class="sidebar-nav">
+                    <h4>On This Page</h4>
+                    <ul>
+                        <li><a href="#accessing" class="active">Accessing Settings</a></li>
+                        <li><a href="#all-settings">All Settings</a></li>
+                        <li><a href="#connection">Connection Settings</a></li>
+                        <li><a href="#display">Display Settings</a></li>
+                        <li><a href="#data">Data Management</a></li>
+                        <li><a href="#examples">Example Configurations</a></li>
+                    </ul>
+                </nav>
+            </aside>
+
+            <!-- Content -->
+            <article class="content-main">
+                <h2 id="accessing">Accessing Settings</h2>
+
+                <p>There are multiple ways to access SSLens settings:</p>
+
+                <h3>Via VS Code Settings UI</h3>
+                <ol>
+                    <li>Open Settings (<code>Cmd+,</code> on macOS or <code>Ctrl+,</code> on Windows/Linux)</li>
+                    <li>Search for "SSLens"</li>
+                    <li>Modify settings using the UI controls</li>
+                </ol>
+
+                <h3>Via settings.json</h3>
+                <ol>
+                    <li>Open Command Palette (<code>Cmd+Shift+P</code>)</li>
+                    <li>Type "Preferences: Open Settings (JSON)"</li>
+                    <li>Add SSLens settings directly to the JSON file</li>
+                </ol>
+
+                <h2 id="all-settings">All Settings Reference</h2>
+
+                <div class="table-wrapper">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Setting</th>
+                                <th>Type</th>
+                                <th>Default</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>sslens.defaultPort</code></td>
+                                <td>number</td>
+                                <td>443</td>
+                                <td>Default port to use when fetching certificates</td>
+                            </tr>
+                            <tr>
+                                <td><code>sslens.timeout</code></td>
+                                <td>number</td>
+                                <td>10000</td>
+                                <td>Connection timeout in milliseconds</td>
+                            </tr>
+                            <tr>
+                                <td><code>sslens.maxRecentItems</code></td>
+                                <td>number</td>
+                                <td>10</td>
+                                <td>Maximum number of recent certificates to keep</td>
+                            </tr>
+                            <tr>
+                                <td><code>sslens.showExpiryWarnings</code></td>
+                                <td>boolean</td>
+                                <td>true</td>
+                                <td>Show warnings for certificates expiring within 30 days</td>
+                            </tr>
+                            <tr>
+                                <td><code>sslens.autoRefresh</code></td>
+                                <td>boolean</td>
+                                <td>false</td>
+                                <td>Automatically refresh saved domains on startup</td>
+                            </tr>
+                            <tr>
+                                <td><code>sslens.savedDomains</code></td>
+                                <td>array</td>
+                                <td>[]</td>
+                                <td>List of saved domains (managed by extension)</td>
+                            </tr>
+                            <tr>
+                                <td><code>sslens.recentCertificates</code></td>
+                                <td>array</td>
+                                <td>[]</td>
+                                <td>Recently fetched certificates (managed by extension)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="connection">Connection Settings</h2>
+
+                <h3>sslens.defaultPort</h3>
+                <p>The default port number to use when fetching certificates. Most HTTPS servers use port 443, but you
+                    might need to change this if you work with non-standard ports.</p>
+
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span class="code-block-lang">JSON</span>
+                        <button class="copy-btn"><i class="bi bi-clipboard"></i> Copy</button>
+                    </div>
+                    <pre><code class="language-json">{
+  "sslens.defaultPort": 443
+}</code></pre>
+                </div>
+
+                <p><strong>When to change:</strong></p>
+                <ul>
+                    <li>Working with development servers on non-standard ports</li>
+                    <li>Testing internal services on custom ports (e.g., 8443, 9443)</li>
+                </ul>
+
+                <h3>sslens.timeout</h3>
+                <p>Connection timeout in milliseconds. Increase this if you're working with slow or distant servers.</p>
+
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span class="code-block-lang">JSON</span>
+                        <button class="copy-btn"><i class="bi bi-clipboard"></i> Copy</button>
+                    </div>
+                    <pre><code class="language-json">{
+  "sslens.timeout": 10000
+}</code></pre>
+                </div>
+
+                <p><strong>Recommended values:</strong></p>
+                <ul>
+                    <li><strong>5000</strong> (5 seconds) - Fast local or nearby servers</li>
+                    <li><strong>10000</strong> (10 seconds) - Default, suitable for most cases</li>
+                    <li><strong>30000</strong> (30 seconds) - Slow or overseas servers</li>
+                </ul>
+
+                <div class="callout callout-warning">
+                    <span class="callout-icon">⚠️</span>
+                    <div class="callout-content">
+                        <h4>Timeout Too Short?</h4>
+                        <p>If you're getting timeout errors, try increasing this value. Very slow servers may need 30
+                            seconds or more.</p>
+                    </div>
+                </div>
+
+                <h2 id="display">Display Settings</h2>
+
+                <h3>sslens.showExpiryWarnings</h3>
+                <p>When enabled, SSLens will show warning indicators for certificates that are expiring soon (within 30
+                    days).</p>
+
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span class="code-block-lang">JSON</span>
+                        <button class="copy-btn"><i class="bi bi-clipboard"></i> Copy</button>
+                    </div>
+                    <pre><code class="language-json">{
+  "sslens.showExpiryWarnings": true
+}</code></pre>
+                </div>
+
+                <p><strong>Visual indicators:</strong></p>
+                <ul>
+                    <li><span class="text-success"><i class="bi bi-circle-fill"></i></span> Green - More than 30 days
+                        remaining</li>
+                    <li><span class="text-warning"><i class="bi bi-circle-fill"></i></span> Yellow - Less than 30 days
+                        remaining</li>
+                    <li><span class="text-danger"><i class="bi bi-circle-fill"></i></span> Red - Expired or less than 7
+                        days remaining</li>
+                </ul>
+
+                <h3>sslens.maxRecentItems</h3>
+                <p>The maximum number of recently fetched certificates to keep in the sidebar. Older items are
+                    automatically removed when this limit is reached.</p>
+
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span class="code-block-lang">JSON</span>
+                        <button class="copy-btn"><i class="bi bi-clipboard"></i> Copy</button>
+                    </div>
+                    <pre><code class="language-json">{
+  "sslens.maxRecentItems": 10
+}</code></pre>
+                </div>
+
+                <p>Set to a higher value if you frequently inspect many different domains.</p>
+
+                <h2 id="data">Data Management Settings</h2>
+
+                <h3>sslens.autoRefresh</h3>
+                <p>When enabled, SSLens will automatically refresh certificate information for all saved domains when VS
+                    Code starts.</p>
+
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span class="code-block-lang">JSON</span>
+                        <button class="copy-btn"><i class="bi bi-clipboard"></i> Copy</button>
+                    </div>
+                    <pre><code class="language-json">{
+  "sslens.autoRefresh": false
+}</code></pre>
+                </div>
+
+                <div class="callout callout-info">
+                    <span class="callout-icon">💡</span>
+                    <div class="callout-content">
+                        <h4>Performance Note</h4>
+                        <p>Auto-refresh makes network requests on startup. If you have many saved domains, this might
+                            slow down VS Code startup slightly. Keep it disabled if startup performance is a priority.
+                        </p>
+                    </div>
+                </div>
+
+                <h3>sslens.savedDomains</h3>
+                <p>This setting stores your saved domains. It's managed by the extension, but you can also edit it
+                    directly:</p>
+
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span class="code-block-lang">JSON</span>
+                        <button class="copy-btn"><i class="bi bi-clipboard"></i> Copy</button>
+                    </div>
+                    <pre><code class="language-json">{
+  "sslens.savedDomains": [
+    {
+      "hostname": "api.github.com",
+      "port": 443,
+      "alias": "GitHub API"
+    },
+    {
+      "hostname": "stripe.com",
+      "port": 443,
+      "alias": "Stripe Production"
+    }
+  ]
+}</code></pre>
+                </div>
+
+                <h2 id="examples">Example Configurations</h2>
+
+                <h3>For Development Teams</h3>
+                <p>If you work with multiple environments and need quick access to certificates:</p>
+
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span class="code-block-lang">JSON</span>
+                        <button class="copy-btn"><i class="bi bi-clipboard"></i> Copy</button>
+                    </div>
+                    <pre><code class="language-json">{
+  "sslens.defaultPort": 443,
+  "sslens.timeout": 15000,
+  "sslens.maxRecentItems": 25,
+  "sslens.showExpiryWarnings": true,
+  "sslens.autoRefresh": true,
+  "sslens.savedDomains": [
+    { "hostname": "api.example.com", "port": 443, "alias": "Production API" },
+    { "hostname": "staging-api.example.com", "port": 443, "alias": "Staging API" },
+    { "hostname": "dev-api.example.com", "port": 8443, "alias": "Dev API" }
+  ]
+}</code></pre>
+                </div>
+
+                <h3>For Mobile Developers</h3>
+                <p>Optimized for generating SSL pinning code:</p>
+
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span class="code-block-lang">JSON</span>
+                        <button class="copy-btn"><i class="bi bi-clipboard"></i> Copy</button>
+                    </div>
+                    <pre><code class="language-json">{
+  "sslens.defaultPort": 443,
+  "sslens.timeout": 10000,
+  "sslens.maxRecentItems": 15,
+  "sslens.showExpiryWarnings": true,
+  "sslens.autoRefresh": false
+}</code></pre>
+                </div>
+
+                <h3>For Security Auditing</h3>
+                <p>Extended timeout and history for thorough analysis:</p>
+
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span class="code-block-lang">JSON</span>
+                        <button class="copy-btn"><i class="bi bi-clipboard"></i> Copy</button>
+                    </div>
+                    <pre><code class="language-json">{
+  "sslens.defaultPort": 443,
+  "sslens.timeout": 30000,
+  "sslens.maxRecentItems": 50,
+  "sslens.showExpiryWarnings": true,
+  "sslens.autoRefresh": false
+}</code></pre>
+                </div>
+
+                <h3>Minimal Configuration</h3>
+                <p>If you just want to use defaults with expiry warnings disabled:</p>
+
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span class="code-block-lang">JSON</span>
+                        <button class="copy-btn"><i class="bi bi-clipboard"></i> Copy</button>
+                    </div>
+                    <pre><code class="language-json">{
+  "sslens.showExpiryWarnings": false
+}</code></pre>
+                </div>
+
+                <div class="callout callout-success">
+                    <span class="callout-icon">✅</span>
+                    <div class="callout-content">
+                        <h4>Workspace Settings</h4>
+                        <p>You can also set SSLens configuration per-workspace by adding settings to
+                            <code>.vscode/settings.json</code> in your project. This is useful for team-shared
+                            configurations.</p>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>© 2024-2026 SSLens. Made with 💜 by <a href="https://github.com/sitharaj88"
+                        target="_blank">Sitharaj</a></p>
+                <p>Released under the <a href="https://github.com/sitharaj88/sslens/blob/main/LICENSE"
+                        target="_blank">MIT License</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- jQuery -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Prism.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+
+    <!-- Custom JS -->
+    <script src="js/main.js"></script>
+</body>
+
+</html>
