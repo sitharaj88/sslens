@@ -6,10 +6,13 @@
 
 <p align="center">
   <strong>Modern SSL/TLS Certificate Inspector & Pinning Toolkit</strong><br>
-  <em>Fetch, analyze, and export certificates with ease</em>
+  <em>Fetch, analyze, and export certificates with ease</em><br>
+  <br>
+  <a href="https://sitharaj88.github.io/sslens/"><strong>📚 Explore the Docs »</strong></a>
 </p>
 
 <p align="center">
+  <a href="https://sitharaj88.github.io/sslens/">Documentation</a> •
   <a href="#-features">Features</a> •
   <a href="#-installation">Installation</a> •
   <a href="#-usage">Usage</a> •
