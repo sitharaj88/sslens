@@ -21,18 +21,18 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/version-1.0.1-6366f1?style=for-the-badge" alt="Version">
+  <img src="https://img.shields.io/badge/version-1.1.0-10b981?style=for-the-badge" alt="Version">
   <img src="https://img.shields.io/badge/license-MIT-10b981?style=for-the-badge" alt="License">
-  <img src="https://img.shields.io/badge/VS%20Code-1.85+-8b5cf6?style=for-the-badge&logo=visual-studio-code" alt="VS Code">
+  <img src="https://img.shields.io/badge/VS%20Code-1.85+-10b981?style=for-the-badge&logo=visual-studio-code" alt="VS Code">
 </p>
 
 ---
 
 <p align="center">
-  <img src="https://img.shields.io/badge/🔍_Certificate_Inspection-Fetch_from_any_domain-6366f1?style=flat-square" alt="Feature">
-  <img src="https://img.shields.io/badge/📌_SSL_Pinning-Android_iOS_Flutter_React_Native-8b5cf6?style=flat-square" alt="Feature">
-  <img src="https://img.shields.io/badge/📤_Export-PEM_DER_Hashes-a855f7?style=flat-square" alt="Feature">
-  <img src="https://img.shields.io/badge/⏰_Expiry_Monitoring-Visual_Status-10b981?style=flat-square" alt="Feature">
+  <img src="https://img.shields.io/badge/🔍_Certificate_Inspection-Fetch_from_any_domain-059669?style=flat-square" alt="Feature">
+  <img src="https://img.shields.io/badge/📌_SSL_Pinning-Android_iOS_Flutter_React_Native-10b981?style=flat-square" alt="Feature">
+  <img src="https://img.shields.io/badge/📤_Export-PEM_DER_Chain-34d399?style=flat-square" alt="Feature">
+  <img src="https://img.shields.io/badge/📥_Import-Local_Certificates-10b981?style=flat-square" alt="Feature">
 </p>
 
 ---
@@ -83,10 +83,24 @@
 ### 📤 Export Options
 - Export as **PEM** format
 - Export as **DER** format
+- **Export entire chain** as PEM bundle
+- **Export all chain certs** as separate DER files
+- Export individual chain certificates
 - Copy **fingerprints** (SHA-256, SHA-1, MD5)
-- Copy hashes to **clipboard**
 
 </td>
+<td width="50%">
+
+### 📥 Import & Inspect
+- Import **local certificate files**
+- Support for **.pem, .crt, .cer, .der** formats
+- Parse **certificate chains** from single file
+- Full X.509 details extraction
+- Same features as fetched certificates
+
+</td>
+</tr>
+<tr>
 <td width="50%">
 
 ### ⏰ Expiry Monitoring
@@ -94,6 +108,16 @@
 - Batch expiry check
 - Days-until-expiry tracking
 - Warning badges
+
+</td>
+<td width="50%">
+
+### 🎨 Modern UI
+- **Emerald green** security-focused theme
+- Certificate chain **breadcrumb** navigation
+- Hover export buttons per chain cert
+- Glassmorphism design
+- Smooth animations
 
 </td>
 </tr>
@@ -125,7 +149,7 @@
 
 ### From VSIX
 ```bash
-code --install-extension sslens-2.0.0.vsix
+code --install-extension sslens-1.1.0.vsix
 ```
 
 ---
@@ -354,7 +378,7 @@ MIT License - see the [LICENSE](LICENSE) file for details.
 ---
 
 <p align="center">
-  <strong>Made with 💜 by <a href="https://github.com/sitharaj88">Sitharaj</a></strong>
+  <strong>Made with 💚 by <a href="https://github.com/sitharaj88">Sitharaj</a></strong>
 </p>
 
 <p align="center">

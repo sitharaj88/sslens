@@ -172,8 +172,7 @@
                             </tr>
                             <tr>
                                 <td><code>SSLens: Inspect Local Certificate File</code></td>
-                                <td>Opens a file picker to select a local certificate file (.pem, .crt, .cer, .der) and
-                                    displays its details.</td>
+                                <td>Opens a file picker to select a local certificate file (.pem, .crt, .cer, .der). Supports certificate chain files (multiple PEM certs in one file). Displays full X.509 details including Subject, Issuer, Validity, Key Info, SANs, and pinning hashes.</td>
                             </tr>
                             <tr>
                                 <td><code>SSLens: Bulk Fetch Certificates</code></td>
@@ -223,6 +222,32 @@
                             <tr>
                                 <td><code>SSLens: Copy SPKI Hash</code></td>
                                 <td>Copies the Subject Public Key Info hash to clipboard. Modern pinning format.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>Chain Export Commands</h3>
+                <div class="table-wrapper">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Command</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>Export All (PEM)</code></td>
+                                <td>Exports the entire certificate chain as a single PEM bundle file. Each certificate includes identifying comments (Leaf/Intermediate/Root).</td>
+                            </tr>
+                            <tr>
+                                <td><code>Export All (DER)</code></td>
+                                <td>Exports all certificates in the chain as separate DER files to a selected folder. Files are named with domain and type (leaf, intermediate, root).</td>
+                            </tr>
+                            <tr>
+                                <td><code>Individual Chain Export</code></td>
+                                <td>Hover over any certificate in the Chain view to reveal PEM and DER export buttons for that specific certificate.</td>
                             </tr>
                         </tbody>
                     </table>
@@ -434,7 +459,7 @@
                         class="bi bi-cup-hot-fill"></i></a>
             </div>
             <div class="footer-bottom">
-                <p>© 2024-2026 SSLens. Made with 💜 by <a href="https://github.com/sitharaj88"
+                <p>© 2024-2026 SSLens. Made with 💚 by <a href="https://github.com/sitharaj88"
                         target="_blank">Sitharaj</a></p>
                 <p>Released under the <a href="https://github.com/sitharaj88/sslens/blob/main/LICENSE"
                         target="_blank">MIT License</a></p>

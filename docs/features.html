@@ -270,7 +270,7 @@ localhost:3443</code></pre>
 
                 <h2 id="export">Export Options</h2>
 
-                <p>SSLens provides multiple export formats for certificates and cryptographic hashes.</p>
+                <p>SSLens provides comprehensive export options for individual certificates and entire certificate chains.</p>
 
                 <h3>Certificate Formats</h3>
 
@@ -299,6 +299,21 @@ localhost:3443</code></pre>
                             </tr>
                         </tbody>
                     </table>
+                </div>
+
+                <h3>Chain Export Options</h3>
+                <ul>
+                    <li><strong>Export All (PEM)</strong> - Export entire certificate chain as a single PEM bundle with identifying headers for each certificate</li>
+                    <li><strong>Export All (DER)</strong> - Export all certificates as separate DER files to a folder</li>
+                    <li><strong>Individual Certificate Export</strong> - Hover over any certificate in the chain view to reveal PEM/DER export buttons</li>
+                </ul>
+
+                <div class="callout callout-info">
+                    <span class="callout-icon">💡</span>
+                    <div class="callout-content">
+                        <h4>PEM Bundle Format</h4>
+                        <p>The PEM bundle includes helpful comments identifying each certificate (Leaf, Intermediate, Root) and their issuers for easy identification.</p>
+                    </div>
                 </div>
 
                 <h3>Hash Exports</h3>
@@ -403,7 +418,7 @@ localhost:3443</code></pre>
     }
   ],
   "exportedAt": "2026-01-25T10:30:00Z",
-  "version": "1.0.1"
+  "version": "1.1.0"
 }</code></pre>
                 </div>
 
@@ -457,22 +472,42 @@ localhost:3443</code></pre>
 
                 <h2 id="local">Local Certificate Files</h2>
 
-                <p>Inspect certificates stored locally on your machine, not just from remote servers.</p>
+                <p>Inspect certificates stored locally on your machine with full X.509 parsing and chain support.</p>
 
                 <h3>Supported File Formats</h3>
                 <ul>
-                    <li><code>.pem</code> - PEM-encoded certificates</li>
+                    <li><code>.pem</code> - PEM-encoded certificates (supports multiple certificates in one file)</li>
                     <li><code>.crt</code> - Certificate files</li>
                     <li><code>.cer</code> - Certificate files (DER or PEM)</li>
                     <li><code>.der</code> - DER-encoded binary certificates</li>
                 </ul>
 
+                <h3>Certificate Chain Files</h3>
+                <p>SSLens now fully supports PEM files containing multiple certificates (certificate chains). When you import a chain file:</p>
+                <ul>
+                    <li>All certificates in the chain are parsed</li>
+                    <li>Full details are extracted using proper X.509 parsing</li>
+                    <li>The chain view displays all certificates with their relationships</li>
+                    <li>Export and pinning features work just like fetched certificates</li>
+                </ul>
+
                 <h3>How to Inspect Local Files</h3>
                 <ol>
-                    <li>Run <strong>"SSLens: Inspect Local Certificate File"</strong></li>
+                    <li>Run <strong>"SSLens: Inspect Local Certificate File"</strong> or click the Import button in the sidebar</li>
                     <li>Select a certificate file from the file picker</li>
-                    <li>View the certificate details in the panel</li>
+                    <li>View full certificate details including Subject, Issuer, Validity, Key Info, SANs, and more</li>
                 </ol>
+
+                <h3>Parsed Information</h3>
+                <p>Local certificates now display the same comprehensive details as fetched certificates:</p>
+                <ul>
+                    <li><strong>Subject & Issuer</strong> - Full distinguished name (CN, O, OU, C, ST, L)</li>
+                    <li><strong>Validity Period</strong> - Not Before, Not After, Days Until Expiry</li>
+                    <li><strong>Public Key</strong> - Algorithm (RSA/ECDSA), key size, curve info</li>
+                    <li><strong>Fingerprints</strong> - SHA-256, SHA-1, MD5</li>
+                    <li><strong>Pinning Hashes</strong> - Public Key Hash, SPKI Hash</li>
+                    <li><strong>Subject Alternative Names</strong> - All SANs from the certificate</li>
+                </ul>
 
                 <div class="callout callout-success">
                     <span class="callout-icon">✅</span>
@@ -499,7 +534,7 @@ localhost:3443</code></pre>
                         class="bi bi-cup-hot-fill"></i></a>
             </div>
             <div class="footer-bottom">
-                <p>© 2024-2026 SSLens. Made with 💜 by <a href="https://github.com/sitharaj88"
+                <p>© 2024-2026 SSLens. Made with 💚 by <a href="https://github.com/sitharaj88"
                         target="_blank">Sitharaj</a></p>
                 <p>Released under the <a href="https://github.com/sitharaj88/sslens/blob/main/LICENSE"
                         target="_blank">MIT License</a></p>

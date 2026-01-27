@@ -5,6 +5,45 @@ All notable changes to SSLens will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-01-27
+
+### ✨ New Features
+
+- **Enhanced Certificate Chain Export**
+  - Export individual certificates from the chain (PEM/DER)
+  - Export All (PEM) - Export entire chain as a single PEM bundle with clear headers
+  - Export All (DER) - Export all certificates as separate DER files to a folder
+  - Export buttons appear on hover for each certificate in the chain view
+  - Added export options to both Chain tab and Export tab
+
+- **Improved Local Certificate Import**
+  - Full X.509 certificate parsing with proper details (subject, issuer, validity, key info)
+  - Support for certificate chain files (multiple PEM certificates in one file)
+  - Added Import button to sidebar tree view
+  - Added Import section in webview Export tab
+  - Shows all certificate details just like fetched certificates
+
+### 🎨 UI Improvements
+
+- **New Green/Emerald Color Theme**
+  - Security-focused emerald green color scheme
+  - Updated accent colors: #10b981 (primary), #34d399 (secondary)
+  - New gradient backgrounds with green tints
+  - Improved visual hierarchy with better contrast
+
+- **Header Redesign**
+  - Domain:port displayed as main header title
+  - Certificate chain shown as breadcrumb below header
+  - Icons indicate certificate type: 🔒 Leaf, 🔗 Intermediate, 🏛️ Root
+  - Horizontal scroll for long chains
+
+### 🔧 Technical Improvements
+
+- Added `parsePEMChain()` method for parsing certificate chain files
+- Uses Node.js `crypto.X509Certificate` for accurate certificate parsing
+- Proper SPKI hash calculation for certificate pinning
+- Dynamic imports to avoid circular dependencies
+
 ## [1.0.1] - 2026-01-24
 
 ### 🎨 Updated
@@ -124,5 +163,5 @@ Saved domains and recent certificates are preserved automatically using the same
 ---
 
 <p align="center">
-  Made with 💜 by <a href="https://github.com/sitharaj">Sitharaj</a>
+  Made with 💚 by <a href="https://github.com/sitharaj">Sitharaj</a>
 </p>
