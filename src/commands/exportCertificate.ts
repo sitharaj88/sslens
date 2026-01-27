@@ -6,7 +6,7 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
-import { CertificateInfo, SUPPORTED_PLATFORMS } from '../types';
+import { CertificateInfo, CertificateChain, SUPPORTED_PLATFORMS } from '../types';
 import { ExportService } from '../services/exportService';
 import { getStorageService } from '../services/storageService';
 import { SSLService } from '../services/sslService';
@@ -242,5 +242,128 @@ function getLanguageId(platformId: string): string {
       return 'javascript';
     default:
       return 'plaintext';
+  }
+}
+
+// Store current certificate chain for export commands
+let currentCertificateChain: CertificateChain | undefined;
+
+export function setCurrentCertificateChain(chain: CertificateChain): void {
+  currentCertificateChain = chain;
+}
+
+/**
+ * Export a specific certificate from the chain as PEM
+ */
+export async function exportChainCertPEMCommand(chainIndex: number): Promise<void> {
+  // Import dynamically to avoid circular dependency
+  const { getCurrentCertificateChain } = await import('../providers/webviewPanel');
+  const chain = getCurrentCertificateChain();
+
+  if (!chain || chainIndex >= chain.certificates.length) {
+    vscode.window.showErrorMessage('Certificate not found in chain');
+    return;
+  }
+
+  const cert = chain.certificates[chainIndex];
+  const totalCerts = chain.certificates.length;
+  const type = chainIndex === 0 ? 'leaf' :
+               chainIndex === totalCerts - 1 ? 'root' :
+               `intermediate_${chainIndex}`;
+
+  const defaultName = `${chain.domain.replace(/[^a-zA-Z0-9]/g, '_')}_${type}.pem`;
+
+  const saveUri = await vscode.window.showSaveDialog({
+    defaultUri: vscode.Uri.file(defaultName),
+    filters: { 'PEM Certificate': ['pem'] }
+  });
+
+  if (!saveUri) {
+    return;
+  }
+
+  try {
+    fs.writeFileSync(saveUri.fsPath, cert.pemEncoded, 'utf-8');
+    vscode.window.showInformationMessage(`Certificate exported to ${path.basename(saveUri.fsPath)}`);
+    const doc = await vscode.workspace.openTextDocument(saveUri);
+    await vscode.window.showTextDocument(doc);
+  } catch (error) {
+    vscode.window.showErrorMessage(`Failed to export certificate: ${error}`);
+  }
+}
+
+/**
+ * Export a specific certificate from the chain as DER
+ */
+export async function exportChainCertDERCommand(chainIndex: number): Promise<void> {
+  // Import dynamically to avoid circular dependency
+  const { getCurrentCertificateChain } = await import('../providers/webviewPanel');
+  const chain = getCurrentCertificateChain();
+
+  if (!chain || chainIndex >= chain.certificates.length) {
+    vscode.window.showErrorMessage('Certificate not found in chain');
+    return;
+  }
+
+  const cert = chain.certificates[chainIndex];
+  const totalCerts = chain.certificates.length;
+  const type = chainIndex === 0 ? 'leaf' :
+               chainIndex === totalCerts - 1 ? 'root' :
+               `intermediate_${chainIndex}`;
+
+  const defaultName = `${chain.domain.replace(/[^a-zA-Z0-9]/g, '_')}_${type}.der`;
+
+  const saveUri = await vscode.window.showSaveDialog({
+    defaultUri: vscode.Uri.file(defaultName),
+    filters: { 'DER Certificate': ['der', 'cer', 'crt'] }
+  });
+
+  if (!saveUri) {
+    return;
+  }
+
+  try {
+    const derBuffer = exportService.exportAsDER(cert);
+    fs.writeFileSync(saveUri.fsPath, derBuffer);
+    vscode.window.showInformationMessage(`Certificate exported to ${path.basename(saveUri.fsPath)}`);
+  } catch (error) {
+    vscode.window.showErrorMessage(`Failed to export certificate: ${error}`);
+  }
+}
+
+/**
+ * Export all certificates in the chain as a single PEM bundle
+ */
+export async function exportAllChainPEMCommand(): Promise<void> {
+  // Import dynamically to avoid circular dependency
+  const { getCurrentCertificateChain } = await import('../providers/webviewPanel');
+  const chain = getCurrentCertificateChain();
+
+  if (!chain) {
+    vscode.window.showErrorMessage('No certificate chain available');
+    return;
+  }
+
+  const defaultName = `${chain.domain.replace(/[^a-zA-Z0-9]/g, '_')}_chain.pem`;
+
+  const saveUri = await vscode.window.showSaveDialog({
+    defaultUri: vscode.Uri.file(defaultName),
+    filters: { 'PEM Certificate Bundle': ['pem'] }
+  });
+
+  if (!saveUri) {
+    return;
+  }
+
+  try {
+    const bundleContent = exportService.exportChainAsPEM(chain);
+    fs.writeFileSync(saveUri.fsPath, bundleContent, 'utf-8');
+    vscode.window.showInformationMessage(
+      `Certificate chain (${chain.certificates.length} certs) exported to ${path.basename(saveUri.fsPath)}`
+    );
+    const doc = await vscode.workspace.openTextDocument(saveUri);
+    await vscode.window.showTextDocument(doc);
+  } catch (error) {
+    vscode.window.showErrorMessage(`Failed to export certificate chain: ${error}`);
   }
 }

@@ -4,7 +4,7 @@
  * Handles various export formats and pinning code generation
  */
 
-import { CertificateInfo, PinningCodeOptions, SUPPORTED_PLATFORMS } from '../types';
+import { CertificateInfo, CertificateChain, PinningCodeOptions, SUPPORTED_PLATFORMS } from '../types';
 
 export class ExportService {
   /**
@@ -33,6 +33,28 @@ export class ExportService {
    */
   getSPKIHash(cert: CertificateInfo): string {
     return cert.spkiHash;
+  }
+
+  /**
+   * Export entire certificate chain as a single PEM bundle
+   * Each certificate is prefixed with a comment identifying it
+   */
+  exportChainAsPEM(chain: CertificateChain): string {
+    const parts: string[] = [];
+    const totalCerts = chain.certificates.length;
+
+    chain.certificates.forEach((cert, index) => {
+      const type = index === 0 ? 'Leaf Certificate' :
+                   index === totalCerts - 1 ? 'Root CA' :
+                   `Intermediate CA ${index}`;
+
+      parts.push(`# ${type}: ${cert.subject.commonName}`);
+      parts.push(`# Issuer: ${cert.issuer.commonName}`);
+      parts.push(cert.pemEncoded);
+      parts.push(''); // Empty line between certificates
+    });
+
+    return parts.join('\n');
   }
 
   /**

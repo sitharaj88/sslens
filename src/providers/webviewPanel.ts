@@ -59,6 +59,15 @@ export function showCertificatePanel(
         case 'exportDER':
           await vscode.commands.executeCommand('sslens.exportDER');
           break;
+        case 'exportChainCertPEM':
+          await vscode.commands.executeCommand('sslens.exportChainCertPEM', message.chainIndex);
+          break;
+        case 'exportChainCertDER':
+          await vscode.commands.executeCommand('sslens.exportChainCertDER', message.chainIndex);
+          break;
+        case 'exportAllChainPEM':
+          await vscode.commands.executeCommand('sslens.exportAllChainPEM');
+          break;
       }
     },
     undefined,
@@ -150,6 +159,10 @@ function getWebviewContent(chain: CertificateChain): string {
         <div class="chain-info">
           <div class="chain-type">${type}</div>
           <div class="chain-cn">${c.subject.commonName}</div>
+        </div>
+        <div class="chain-actions">
+          <button class="chain-export-btn" onclick="exportChainCertPEM(${i})" title="Export as PEM">PEM</button>
+          <button class="chain-export-btn" onclick="exportChainCertDER(${i})" title="Export as DER">DER</button>
         </div>
       </div>
       ${i < chain.certificates.length - 1 ? '<div class="chain-arrow">↓</div>' : ''}
@@ -509,6 +522,54 @@ function getWebviewContent(chain: CertificateChain): string {
       opacity: 0.6;
     }
 
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .section-header .section-title {
+      margin-bottom: 0;
+    }
+
+    .section-header .section-title::after {
+      display: none;
+    }
+
+    .chain-info {
+      flex: 1;
+    }
+
+    .chain-actions {
+      display: flex;
+      gap: 8px;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .chain-cert:hover .chain-actions {
+      opacity: 1;
+    }
+
+    .chain-export-btn {
+      background: var(--bg-glass);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 12px;
+      cursor: pointer;
+      color: var(--text-secondary);
+      font-size: 11px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .chain-export-btn:hover {
+      background: var(--accent-primary);
+      border-color: var(--accent-primary);
+      color: white;
+    }
+
     /* SAN container */
     .san-container {
       display: flex;
@@ -758,7 +819,10 @@ function getWebviewContent(chain: CertificateChain): string {
     <!-- Chain Tab -->
     <div id="chain" class="tab-content">
       <div class="section">
-        <div class="section-title">🔗 Certificate Chain (${chain.certificates.length} certificates)</div>
+        <div class="section-header">
+          <div class="section-title">🔗 Certificate Chain (${chain.certificates.length} certificates)</div>
+          <button class="action-btn primary" onclick="exportAllChainPEM()">Export All (PEM Bundle)</button>
+        </div>
         <div class="chain-container">
           ${chainViz}
         </div>
@@ -797,9 +861,16 @@ function getWebviewContent(chain: CertificateChain): string {
     <!-- Export Tab -->
     <div id="export" class="tab-content">
       <div class="section">
-        <div class="section-title">📤 Export Certificate</div>
+        <div class="section-title">📤 Export Full Chain</div>
         <div class="action-buttons">
-          <button class="action-btn primary" onclick="exportPEM()">Export PEM</button>
+          <button class="action-btn primary" onclick="exportAllChainPEM()">Export All (PEM Bundle)</button>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">📄 Export Leaf Certificate</div>
+        <div class="action-buttons">
+          <button class="action-btn" onclick="exportPEM()">Export PEM</button>
           <button class="action-btn" onclick="exportDER()">Export DER</button>
           <button class="action-btn" onclick="saveDomain()">⭐ Save Domain</button>
         </div>
@@ -869,6 +940,18 @@ function getWebviewContent(chain: CertificateChain): string {
     function exportDER() {
       vscode.postMessage({ command: 'exportDER' });
     }
+
+    function exportChainCertPEM(index) {
+      vscode.postMessage({ command: 'exportChainCertPEM', chainIndex: index });
+    }
+
+    function exportChainCertDER(index) {
+      vscode.postMessage({ command: 'exportChainCertDER', chainIndex: index });
+    }
+
+    function exportAllChainPEM() {
+      vscode.postMessage({ command: 'exportAllChainPEM' });
+    }
   </script>
 </body>
 </html>`;
@@ -879,4 +962,11 @@ function getWebviewContent(chain: CertificateChain): string {
  */
 export function getCurrentCertificate(): CertificateInfo | undefined {
   return currentCertificateChain?.certificates[0];
+}
+
+/**
+ * Get current certificate chain
+ */
+export function getCurrentCertificateChain(): CertificateChain | undefined {
+  return currentCertificateChain;
 }

@@ -23,7 +23,10 @@ import {
   copyPublicKeyHashCommand,
   copySPKIHashCommand,
   generatePinningCodeCommand,
-  setCurrentCertificate
+  setCurrentCertificate,
+  exportChainCertPEMCommand,
+  exportChainCertDERCommand,
+  exportAllChainPEMCommand
 } from './commands/exportCertificate';
 import {
   bulkFetchCommand,
@@ -142,6 +145,27 @@ export function activate(context: vscode.ExtensionContext) {
         setCurrentCertificate(cert);
       }
       generatePinningCodeCommand();
+    })
+  );
+
+  // Export specific chain certificate as PEM
+  context.subscriptions.push(
+    vscode.commands.registerCommand('sslens.exportChainCertPEM', (chainIndex: number) => {
+      exportChainCertPEMCommand(chainIndex);
+    })
+  );
+
+  // Export specific chain certificate as DER
+  context.subscriptions.push(
+    vscode.commands.registerCommand('sslens.exportChainCertDER', (chainIndex: number) => {
+      exportChainCertDERCommand(chainIndex);
+    })
+  );
+
+  // Export all chain certificates as PEM bundle
+  context.subscriptions.push(
+    vscode.commands.registerCommand('sslens.exportAllChainPEM', () => {
+      exportAllChainPEMCommand();
     })
   );
 
