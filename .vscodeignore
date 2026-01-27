@@ -9,6 +9,7 @@ media/banner.html
 # Development files
 .vscode/**
 .vscode-test/**
+.claude/**
 src/**
 .git/**
 .gitignore
@@ -27,6 +28,7 @@ src/**
 vsc-extension-quickstart.md
 CHANGELOG.md
 LINKEDIN_POST.md
+docs/**
 
 # Dependencies - no production deps needed
 node_modules/**
@@ -38,6 +40,8 @@ test/**
 
 # Package files
 *.vsix
+*.zip
+sslens-*/
 package-lock.json
 
 # Keep only PNG icon for marketplace
