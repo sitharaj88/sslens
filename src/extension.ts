@@ -26,7 +26,8 @@ import {
   setCurrentCertificate,
   exportChainCertPEMCommand,
   exportChainCertDERCommand,
-  exportAllChainPEMCommand
+  exportAllChainPEMCommand,
+  exportAllChainDERCommand
 } from './commands/exportCertificate';
 import {
   bulkFetchCommand,
@@ -166,6 +167,13 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     vscode.commands.registerCommand('sslens.exportAllChainPEM', () => {
       exportAllChainPEMCommand();
+    })
+  );
+
+  // Export all chain certificates as separate DER files
+  context.subscriptions.push(
+    vscode.commands.registerCommand('sslens.exportAllChainDER', () => {
+      exportAllChainDERCommand();
     })
   );
 

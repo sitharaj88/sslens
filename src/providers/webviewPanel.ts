@@ -68,6 +68,9 @@ export function showCertificatePanel(
         case 'exportAllChainPEM':
           await vscode.commands.executeCommand('sslens.exportAllChainPEM');
           break;
+        case 'exportAllChainDER':
+          await vscode.commands.executeCommand('sslens.exportAllChainDER');
+          break;
       }
     },
     undefined,
@@ -169,6 +172,15 @@ function getWebviewContent(chain: CertificateChain): string {
     `;
   }).join('\n');
 
+  // Chain breadcrumb for header
+  const chainBreadcrumb = chain.certificates.map((c, i) => {
+    const icon = i === 0 ? '🔒' : i === chain.certificates.length - 1 ? '🏛️' : '🔗';
+    const name = c.subject.commonName.length > 25
+      ? c.subject.commonName.substring(0, 22) + '...'
+      : c.subject.commonName;
+    return `<span class="breadcrumb-item">${icon} ${name}</span>`;
+  }).join('<span class="breadcrumb-separator">→</span>');
+
   // SAN list
   const sanList = cert.subjectAltNames.length > 0 
     ? cert.subjectAltNames.map(s => `<div class="san-item">${s}</div>`).join('\n')
@@ -182,26 +194,26 @@ function getWebviewContent(chain: CertificateChain): string {
   <title>SSLens Certificate</title>
   <style>
     :root {
-      --bg-primary: #0a0a0f;
-      --bg-secondary: rgba(20, 20, 35, 0.8);
-      --bg-tertiary: rgba(30, 30, 50, 0.6);
-      --bg-glass: rgba(255, 255, 255, 0.03);
-      --text-primary: #e4e4e7;
-      --text-secondary: #71717a;
-      --text-muted: #52525b;
-      --accent-primary: #6366f1;
-      --accent-secondary: #8b5cf6;
-      --accent-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+      --bg-primary: #0a0f0a;
+      --bg-secondary: rgba(16, 32, 24, 0.85);
+      --bg-tertiary: rgba(24, 48, 36, 0.6);
+      --bg-glass: rgba(16, 185, 129, 0.05);
+      --text-primary: #e4f0e8;
+      --text-secondary: #7a9988;
+      --text-muted: #5a7568;
+      --accent-primary: #10b981;
+      --accent-secondary: #34d399;
+      --accent-gradient: linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%);
       --success: #10b981;
       --success-bg: rgba(16, 185, 129, 0.15);
       --warning: #f59e0b;
       --warning-bg: rgba(245, 158, 11, 0.15);
       --error: #ef4444;
       --error-bg: rgba(239, 68, 68, 0.15);
-      --border: rgba(255, 255, 255, 0.08);
-      --border-glow: rgba(99, 102, 241, 0.3);
-      --shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
-      --shadow-glow: 0 0 40px rgba(99, 102, 241, 0.15);
+      --border: rgba(16, 185, 129, 0.15);
+      --border-glow: rgba(16, 185, 129, 0.4);
+      --shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+      --shadow-glow: 0 0 40px rgba(16, 185, 129, 0.2);
     }
 
     @keyframes fadeIn {
@@ -228,9 +240,9 @@ function getWebviewContent(chain: CertificateChain): string {
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background: var(--bg-primary);
-      background-image: 
-        radial-gradient(ellipse at top left, rgba(99, 102, 241, 0.08) 0%, transparent 50%),
-        radial-gradient(ellipse at bottom right, rgba(139, 92, 246, 0.08) 0%, transparent 50%);
+      background-image:
+        radial-gradient(ellipse at top left, rgba(16, 185, 129, 0.1) 0%, transparent 50%),
+        radial-gradient(ellipse at bottom right, rgba(52, 211, 153, 0.08) 0%, transparent 50%);
       color: var(--text-primary);
       padding: 24px;
       line-height: 1.6;
@@ -262,9 +274,9 @@ function getWebviewContent(chain: CertificateChain): string {
     }
 
     .header-left h1 {
-      font-size: 26px;
+      font-size: 24px;
       font-weight: 700;
-      margin-bottom: 6px;
+      margin-bottom: 0;
       background: var(--accent-gradient);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -272,22 +284,13 @@ function getWebviewContent(chain: CertificateChain): string {
       display: flex;
       align-items: center;
       gap: 10px;
+      font-family: 'SF Mono', 'Monaco', 'Menlo', monospace;
     }
 
     .header-left h1::before {
-      content: '🔍';
+      content: '🔐';
       -webkit-text-fill-color: initial;
-      font-size: 24px;
-    }
-
-    .header-left .domain {
-      color: var(--text-secondary);
-      font-size: 14px;
-      font-family: 'SF Mono', 'Monaco', 'Menlo', monospace;
-      padding: 4px 10px;
-      background: var(--bg-glass);
-      border-radius: 6px;
-      display: inline-block;
+      font-size: 22px;
     }
 
     .status-badge {
@@ -348,6 +351,32 @@ function getWebviewContent(chain: CertificateChain): string {
 
     .chain-valid { color: var(--success); }
     .chain-invalid { color: var(--error); }
+
+    .chain-breadcrumb {
+      display: flex;
+      flex-wrap: nowrap;
+      align-items: center;
+      gap: 6px;
+      margin-top: 12px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .chain-breadcrumb::-webkit-scrollbar {
+      display: none;
+    }
+
+    .breadcrumb-item {
+      font-size: 12px;
+      color: var(--text-secondary);
+      white-space: nowrap;
+    }
+
+    .breadcrumb-separator {
+      color: var(--accent-primary);
+      font-size: 12px;
+      opacity: 0.6;
+    }
 
     /* Tabs */
     .tabs {
@@ -535,6 +564,11 @@ function getWebviewContent(chain: CertificateChain): string {
 
     .section-header .section-title::after {
       display: none;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 8px;
     }
 
     .chain-info {
@@ -742,8 +776,8 @@ function getWebviewContent(chain: CertificateChain): string {
   <div class="container">
     <div class="header">
       <div class="header-left">
-        <h1>${cert.subject.commonName}</h1>
-        <div class="domain">${cert.domain}:${cert.port}</div>
+        <h1>${chain.domain}:${chain.port}</h1>
+        <div class="chain-breadcrumb">${chainBreadcrumb}</div>
         <div class="chain-status">${chainStatus}</div>
       </div>
       <div class="status-badge ${statusClass}">${statusBadge}</div>
@@ -821,7 +855,10 @@ function getWebviewContent(chain: CertificateChain): string {
       <div class="section">
         <div class="section-header">
           <div class="section-title">🔗 Certificate Chain (${chain.certificates.length} certificates)</div>
-          <button class="action-btn primary" onclick="exportAllChainPEM()">Export All (PEM Bundle)</button>
+          <div class="header-actions">
+            <button class="action-btn primary" onclick="exportAllChainPEM()">Export All (PEM)</button>
+            <button class="action-btn" onclick="exportAllChainDER()">Export All (DER)</button>
+          </div>
         </div>
         <div class="chain-container">
           ${chainViz}
@@ -863,7 +900,8 @@ function getWebviewContent(chain: CertificateChain): string {
       <div class="section">
         <div class="section-title">📤 Export Full Chain</div>
         <div class="action-buttons">
-          <button class="action-btn primary" onclick="exportAllChainPEM()">Export All (PEM Bundle)</button>
+          <button class="action-btn primary" onclick="exportAllChainPEM()">Export All (PEM)</button>
+          <button class="action-btn" onclick="exportAllChainDER()">Export All (DER)</button>
         </div>
       </div>
 
@@ -951,6 +989,10 @@ function getWebviewContent(chain: CertificateChain): string {
 
     function exportAllChainPEM() {
       vscode.postMessage({ command: 'exportAllChainPEM' });
+    }
+
+    function exportAllChainDER() {
+      vscode.postMessage({ command: 'exportAllChainDER' });
     }
   </script>
 </body>

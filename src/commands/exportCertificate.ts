@@ -367,3 +367,54 @@ export async function exportAllChainPEMCommand(): Promise<void> {
     vscode.window.showErrorMessage(`Failed to export certificate chain: ${error}`);
   }
 }
+
+/**
+ * Export all certificates in the chain as separate DER files
+ */
+export async function exportAllChainDERCommand(): Promise<void> {
+  // Import dynamically to avoid circular dependency
+  const { getCurrentCertificateChain } = await import('../providers/webviewPanel');
+  const chain = getCurrentCertificateChain();
+
+  if (!chain) {
+    vscode.window.showErrorMessage('No certificate chain available');
+    return;
+  }
+
+  // Ask user to select a folder
+  const folderUri = await vscode.window.showOpenDialog({
+    canSelectFiles: false,
+    canSelectFolders: true,
+    canSelectMany: false,
+    openLabel: 'Select folder to save DER files'
+  });
+
+  if (!folderUri || folderUri.length === 0) {
+    return;
+  }
+
+  const folder = folderUri[0].fsPath;
+  const domainPrefix = chain.domain.replace(/[^a-zA-Z0-9]/g, '_');
+  const totalCerts = chain.certificates.length;
+
+  try {
+    for (let i = 0; i < totalCerts; i++) {
+      const cert = chain.certificates[i];
+      const type = i === 0 ? 'leaf' :
+                   i === totalCerts - 1 ? 'root' :
+                   `intermediate_${i}`;
+
+      const fileName = `${domainPrefix}_${type}.der`;
+      const filePath = path.join(folder, fileName);
+
+      const derBuffer = exportService.exportAsDER(cert);
+      fs.writeFileSync(filePath, derBuffer);
+    }
+
+    vscode.window.showInformationMessage(
+      `${totalCerts} DER certificates exported to ${path.basename(folder)}/`
+    );
+  } catch (error) {
+    vscode.window.showErrorMessage(`Failed to export DER certificates: ${error}`);
+  }
+}
