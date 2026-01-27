@@ -154,6 +154,11 @@
           "group": "navigation"
         },
         {
+          "command": "sslens.inspectLocalCert",
+          "when": "view == sslensDomains",
+          "group": "navigation"
+        },
+        {
           "command": "sslens.refreshDomains",
           "when": "view == sslensDomains",
           "group": "navigation"

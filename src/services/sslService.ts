@@ -291,59 +291,241 @@ export class SSLService {
   }
 
   /**
-   * Parse a local PEM file
+   * Parse a local PEM file (single certificate)
    */
   parsePEMFile(pemContent: string): CertificateInfo {
-    // Extract the base64 content
-    const matches = pemContent.match(/-----BEGIN CERTIFICATE-----([\s\S]*?)-----END CERTIFICATE-----/);
-    
-    if (!matches || !matches[1]) {
-      throw new Error('Invalid PEM format');
+    const chain = this.parsePEMChain(pemContent);
+    if (chain.certificates.length === 0) {
+      throw new Error('No certificates found in PEM file');
+    }
+    return chain.certificates[0];
+  }
+
+  /**
+   * Parse a PEM file that may contain multiple certificates (chain)
+   */
+  parsePEMChain(pemContent: string, sourceName: string = 'local-file'): CertificateChain {
+    // Find all certificates in the PEM content
+    const certRegex = /-----BEGIN CERTIFICATE-----([\s\S]*?)-----END CERTIFICATE-----/g;
+    const certificates: CertificateInfo[] = [];
+    let match;
+    let chainIndex = 0;
+
+    while ((match = certRegex.exec(pemContent)) !== null) {
+      const base64 = match[1].replace(/\s/g, '');
+      const pemBlock = `-----BEGIN CERTIFICATE-----\n${base64.match(/.{1,64}/g)?.join('\n')}\n-----END CERTIFICATE-----`;
+
+      try {
+        const certInfo = this.parseX509Certificate(pemBlock, sourceName, chainIndex);
+        certificates.push(certInfo);
+        chainIndex++;
+      } catch (error) {
+        console.error(`Failed to parse certificate at index ${chainIndex}:`, error);
+      }
     }
 
-    const base64 = matches[1].replace(/\s/g, '');
-    const der = Buffer.from(base64, 'base64');
+    if (certificates.length === 0) {
+      throw new Error('No valid certificates found in PEM file');
+    }
 
-    // Create a minimal certificate info for local files
-    // Note: Full parsing would require a proper X.509 parser
-    const sha256 = this.formatFingerprint(crypto.createHash('sha256').update(der).digest('hex'));
-    const sha1 = this.formatFingerprint(crypto.createHash('sha1').update(der).digest('hex'));
-    const md5 = this.formatFingerprint(crypto.createHash('md5').update(der).digest('hex'));
+    // Determine if the chain is valid
+    let isValid = true;
+    for (const cert of certificates) {
+      if (cert.isExpired) {
+        isValid = false;
+        break;
+      }
+    }
 
     return {
-      domain: 'local-file',
+      domain: sourceName,
       port: 0,
-      fetchedAt: new Date(),
+      certificates,
+      isValid
+    };
+  }
+
+  /**
+   * Parse a single X.509 certificate using Node.js crypto
+   */
+  private parseX509Certificate(pemContent: string, domain: string, chainIndex: number): CertificateInfo {
+    // Use Node.js crypto.X509Certificate for proper parsing
+    const x509 = new crypto.X509Certificate(pemContent);
+
+    const now = new Date();
+    const validFrom = new Date(x509.validFrom);
+    const validTo = new Date(x509.validTo);
+    const daysUntilExpiry = Math.floor((validTo.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+
+    // Parse subject and issuer
+    const subject = this.parseX509Name(x509.subject);
+    const issuer = this.parseX509Name(x509.issuer);
+
+    // Calculate fingerprints from raw DER
+    const derBuffer = Buffer.from(x509.raw);
+    const sha256 = this.formatFingerprint(crypto.createHash('sha256').update(derBuffer).digest('hex'));
+    const sha1 = this.formatFingerprint(crypto.createHash('sha1').update(derBuffer).digest('hex'));
+    const md5 = this.formatFingerprint(crypto.createHash('md5').update(derBuffer).digest('hex'));
+
+    // Get public key info
+    const publicKey = x509.publicKey;
+    const keyType = publicKey.asymmetricKeyType || 'unknown';
+    let algorithm = keyType.toUpperCase();
+    let keySize = 0;
+
+    if (keyType === 'rsa') {
+      const keyDetails = publicKey.asymmetricKeyDetails;
+      keySize = keyDetails?.modulusLength || 2048;
+    } else if (keyType === 'ec') {
+      const keyDetails = publicKey.asymmetricKeyDetails;
+      algorithm = `ECDSA (${keyDetails?.namedCurve || 'unknown'})`;
+      const curveSizes: Record<string, number> = {
+        'prime256v1': 256,
+        'P-256': 256,
+        'secp384r1': 384,
+        'P-384': 384,
+        'secp521r1': 521,
+        'P-521': 521,
+      };
+      keySize = curveSizes[keyDetails?.namedCurve || ''] || 256;
+    }
+
+    // Calculate SPKI hash for pinning
+    const spkiDer = publicKey.export({ type: 'spki', format: 'der' });
+    const publicKeyHash = crypto.createHash('sha256').update(spkiDer).digest('base64');
+    const spkiHash = `sha256/${publicKeyHash}`;
+
+    // Parse Subject Alternative Names
+    const subjectAltNames = this.parseX509SAN(x509.subjectAltName);
+
+    // Parse key usage
+    const keyUsage = x509.keyUsage;
+
+    // Determine if this is a root CA
+    const isRootCA = subject.commonName === issuer.commonName && x509.ca;
+
+    // Convert to PEM with proper formatting
+    const base64 = derBuffer.toString('base64');
+    const pemEncoded = `-----BEGIN CERTIFICATE-----\n${base64.match(/.{1,64}/g)?.join('\n')}\n-----END CERTIFICATE-----`;
+
+    return {
+      domain,
+      port: 0,
+      fetchedAt: now,
       subject: {
-        commonName: 'Parsed from local file',
+        commonName: subject.commonName || '',
+        organization: subject.organization,
+        organizationalUnit: subject.organizationalUnit,
+        country: subject.country,
+        state: subject.state,
+        locality: subject.locality,
       },
       issuer: {
-        commonName: 'Unknown (local file)',
+        commonName: issuer.commonName || '',
+        organization: issuer.organization,
+        organizationalUnit: issuer.organizationalUnit,
+        country: issuer.country,
       },
-      validFrom: new Date(),
-      validTo: new Date(),
-      isExpired: false,
-      daysUntilExpiry: 0,
-      serialNumber: 'Unknown',
+      validFrom,
+      validTo,
+      isExpired: now > validTo,
+      daysUntilExpiry,
+      serialNumber: x509.serialNumber,
       version: 3,
-      signatureAlgorithm: 'Unknown',
+      signatureAlgorithm: this.extractSignatureAlgorithm(x509),
       publicKey: {
-        algorithm: 'Unknown',
-        keySize: 0,
+        algorithm,
+        keySize,
       },
       fingerprints: {
         sha1,
         sha256,
         md5,
       },
-      subjectAltNames: [],
-      publicKeyHash: crypto.createHash('sha256').update(der).digest('base64'),
-      spkiHash: `sha256/${crypto.createHash('sha256').update(der).digest('base64')}`,
-      pemEncoded: pemContent,
+      subjectAltNames,
+      keyUsage: keyUsage || undefined,
+      publicKeyHash,
+      spkiHash,
+      pemEncoded,
       derEncoded: base64,
-      isRootCA: false,
-      chainIndex: 0,
+      isRootCA,
+      chainIndex,
     };
+  }
+
+  /**
+   * Parse X.509 distinguished name string
+   */
+  private parseX509Name(nameStr: string): {
+    commonName?: string;
+    organization?: string;
+    organizationalUnit?: string;
+    country?: string;
+    state?: string;
+    locality?: string;
+  } {
+    const result: Record<string, string> = {};
+
+    // Parse format like "CN=example.com\nO=Example Inc\nC=US"
+    const parts = nameStr.split('\n');
+    for (const part of parts) {
+      const [key, ...valueParts] = part.split('=');
+      const value = valueParts.join('='); // Handle values with = in them
+      if (key && value) {
+        result[key.trim()] = value.trim();
+      }
+    }
+
+    return {
+      commonName: result['CN'],
+      organization: result['O'],
+      organizationalUnit: result['OU'],
+      country: result['C'],
+      state: result['ST'],
+      locality: result['L'],
+    };
+  }
+
+  /**
+   * Parse Subject Alternative Names from X.509 extension
+   */
+  private parseX509SAN(sanStr: string | undefined): string[] {
+    if (!sanStr) {
+      return [];
+    }
+
+    const sans: string[] = [];
+    const entries = sanStr.split(', ');
+
+    for (const entry of entries) {
+      // Format is like "DNS:example.com" or "IP Address:1.2.3.4"
+      const colonIndex = entry.indexOf(':');
+      if (colonIndex !== -1) {
+        sans.push(entry.substring(colonIndex + 1));
+      } else {
+        sans.push(entry);
+      }
+    }
+
+    return sans;
+  }
+
+  /**
+   * Extract signature algorithm from X.509 certificate
+   */
+  private extractSignatureAlgorithm(x509: crypto.X509Certificate): string {
+    // Try to get from fingerprint type (SHA-256 fingerprint means SHA-256 based signature)
+    if (x509.fingerprint256) {
+      // Check the public key type to determine full algorithm
+      const keyType = x509.publicKey.asymmetricKeyType;
+      if (keyType === 'rsa') {
+        return 'SHA256withRSA';
+      } else if (keyType === 'ec') {
+        return 'SHA256withECDSA';
+      }
+      return 'SHA-256';
+    }
+    return 'Unknown';
   }
 
   /**

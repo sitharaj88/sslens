@@ -71,6 +71,9 @@ export function showCertificatePanel(
         case 'exportAllChainDER':
           await vscode.commands.executeCommand('sslens.exportAllChainDER');
           break;
+        case 'importLocalCert':
+          await vscode.commands.executeCommand('sslens.inspectLocalCert');
+          break;
       }
     },
     undefined,
@@ -770,6 +773,13 @@ function getWebviewContent(chain: CertificateChain): string {
     .footer a:hover {
       text-decoration: underline;
     }
+
+    .info-hint {
+      margin-top: 12px;
+      font-size: 12px;
+      color: var(--text-muted);
+      font-style: italic;
+    }
   </style>
 </head>
 <body>
@@ -939,6 +949,14 @@ function getWebviewContent(chain: CertificateChain): string {
           ${cert.serialNumber}
         </div>
       </div>
+
+      <div class="section">
+        <div class="section-title">📥 Import Local Certificate</div>
+        <div class="action-buttons">
+          <button class="action-btn" onclick="importLocalCert()">Import Certificate File</button>
+        </div>
+        <div class="info-hint">Import .pem, .crt, .cer, or .der files from your local system</div>
+      </div>
     </div>
   </div>
 
@@ -993,6 +1011,10 @@ function getWebviewContent(chain: CertificateChain): string {
 
     function exportAllChainDER() {
       vscode.postMessage({ command: 'exportAllChainDER' });
+    }
+
+    function importLocalCert() {
+      vscode.postMessage({ command: 'importLocalCert' });
     }
   </script>
 </body>
