@@ -8,7 +8,6 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { CertificateInfo, CertificateChain, SUPPORTED_PLATFORMS } from '../types';
 import { ExportService } from '../services/exportService';
-import { getStorageService } from '../services/storageService';
 import { SSLService } from '../services/sslService';
 
 const exportService = new ExportService();
@@ -246,10 +245,10 @@ function getLanguageId(platformId: string): string {
 }
 
 // Store current certificate chain for export commands
-let currentCertificateChain: CertificateChain | undefined;
+let _currentCertificateChain: CertificateChain | undefined;
 
 export function setCurrentCertificateChain(chain: CertificateChain): void {
-  currentCertificateChain = chain;
+  _currentCertificateChain = chain;
 }
 
 /**

@@ -18,8 +18,11 @@ src/**
 **/.DS_Store
 
 # Build & Config
+out/**
 **/tsconfig.json
 **/.eslintrc.json
+eslint.config.mjs
+esbuild.mjs
 **/*.map
 **/*.ts
 **/*.d.ts

@@ -11,7 +11,7 @@ import { getStorageService } from '../services/storageService';
 /**
  * Bulk fetch certificates from multiple domains
  */
-export async function bulkFetchCommand(context: vscode.ExtensionContext): Promise<void> {
+export async function bulkFetchCommand(_context: vscode.ExtensionContext): Promise<void> {
   const input = await vscode.window.showInputBox({
     prompt: 'Enter domains (comma or newline separated)',
     placeHolder: 'google.com, github.com, example.com',
@@ -95,7 +95,7 @@ export async function bulkFetchCommand(context: vscode.ExtensionContext): Promis
 /**
  * Compare two certificates
  */
-export async function compareCertificatesCommand(context: vscode.ExtensionContext): Promise<void> {
+export async function compareCertificatesCommand(_context: vscode.ExtensionContext): Promise<void> {
   const domain1 = await vscode.window.showInputBox({
     prompt: 'Enter first domain',
     placeHolder: 'example.com'
@@ -195,7 +195,7 @@ export async function checkExpiryCommand(): Promise<void> {
             daysLeft: cert.daysUntilExpiry,
             status
           });
-        } catch (error) {
+        } catch {
           expiryReport.push({
             domain: `${saved.domain}:${saved.port}`,
             daysLeft: -1,

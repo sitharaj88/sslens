@@ -142,18 +142,18 @@ export class SSLService {
       port,
       fetchedAt: now,
       subject: {
-        commonName: cert.subject?.CN || '',
-        organization: cert.subject?.O,
-        organizationalUnit: cert.subject?.OU,
-        country: cert.subject?.C,
-        state: cert.subject?.ST,
-        locality: cert.subject?.L,
+        commonName: this.firstValue(cert.subject?.CN) || '',
+        organization: this.firstValue(cert.subject?.O),
+        organizationalUnit: this.firstValue(cert.subject?.OU),
+        country: this.firstValue(cert.subject?.C),
+        state: this.firstValue(cert.subject?.ST),
+        locality: this.firstValue(cert.subject?.L),
       },
       issuer: {
-        commonName: cert.issuer?.CN || '',
-        organization: cert.issuer?.O,
-        organizationalUnit: cert.issuer?.OU,
-        country: cert.issuer?.C,
+        commonName: this.firstValue(cert.issuer?.CN) || '',
+        organization: this.firstValue(cert.issuer?.O),
+        organizationalUnit: this.firstValue(cert.issuer?.OU),
+        country: this.firstValue(cert.issuer?.C),
       },
       validFrom,
       validTo,
@@ -177,6 +177,14 @@ export class SSLService {
       isRootCA,
       chainIndex,
     };
+  }
+
+  /**
+   * Distinguished-name fields may be a string or string[] depending on
+   * the certificate; normalize to the first value.
+   */
+  private firstValue(value: string | string[] | undefined): string | undefined {
+    return Array.isArray(value) ? value[0] : value;
   }
 
   /**

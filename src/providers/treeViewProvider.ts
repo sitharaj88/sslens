@@ -161,7 +161,7 @@ export class SavedDomainsProvider implements vscode.TreeDataProvider<DomainTreeI
       ));
 
       return Promise.resolve(items);
-    } catch (error) {
+    } catch {
       return Promise.resolve([]);
     }
   }
@@ -208,7 +208,7 @@ export class RecentCertificatesProvider implements vscode.TreeDataProvider<Recen
       ));
 
       return Promise.resolve(items);
-    } catch (error) {
+    } catch {
       return Promise.resolve([]);
     }
   }
@@ -225,8 +225,10 @@ export function registerTreeViews(context: vscode.ExtensionContext): void {
   savedDomainsProvider = new SavedDomainsProvider();
   recentCertificatesProvider = new RecentCertificatesProvider();
 
-  vscode.window.registerTreeDataProvider('sslensDomains', savedDomainsProvider);
-  vscode.window.registerTreeDataProvider('sslensRecent', recentCertificatesProvider);
+  context.subscriptions.push(
+    vscode.window.registerTreeDataProvider('sslensDomains', savedDomainsProvider),
+    vscode.window.registerTreeDataProvider('sslensRecent', recentCertificatesProvider)
+  );
 }
 
 /**

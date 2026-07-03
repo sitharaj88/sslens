@@ -1,16 +1,17 @@
 {
   "name": "sslens",
   "displayName": "SSLens",
-  "description": "Modern SSL/TLS certificate inspector & pinning toolkit. Fetch, analyze, and export certificates with ease. Perfect for mobile developers.",
-  "version": "1.1.1",
+  "description": "Modern SSL/TLS certificate inspector & pinning toolkit with GitHub Copilot integration. Fetch, analyze, and export certificates with ease. Perfect for mobile developers.",
+  "version": "1.2.0",
   "publisher": "sitharaj",
   "engines": {
-    "vscode": "^1.85.0"
+    "vscode": "^1.95.0"
   },
   "categories": [
-    "Other",
+    "AI",
+    "Chat",
     "Visualization",
-    "Debuggers"
+    "Other"
   ],
   "keywords": [
     "ssl",
@@ -19,6 +20,9 @@
     "pinning",
     "https",
     "security",
+    "copilot",
+    "chat",
+    "ai",
     "android",
     "ios",
     "flutter",
@@ -31,13 +35,149 @@
     "color": "#0f0f23",
     "theme": "dark"
   },
-  "activationEvents": [
-    "onCommand:sslens.fetchCertificate",
-    "onCommand:sslens.inspectLocalCert",
-    "onView:sslensDomains"
-  ],
-  "main": "./out/extension.js",
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": true
+    },
+    "virtualWorkspaces": true
+  },
+  "activationEvents": [],
+  "main": "./dist/extension.js",
   "contributes": {
+    "chatParticipants": [
+      {
+        "id": "sslens.chat",
+        "fullName": "SSLens",
+        "name": "sslens",
+        "description": "Inspect SSL/TLS certificates, check expiry, generate pinning code",
+        "isSticky": true,
+        "commands": [
+          {
+            "name": "check",
+            "description": "Fetch and analyze the certificate chain of a live host"
+          },
+          {
+            "name": "pin",
+            "description": "Generate certificate pinning code for a host (OkHttp, URLSession, Alamofire, Dio, …)"
+          },
+          {
+            "name": "expiry",
+            "description": "Certificate expiry report for the given domains, or all saved domains"
+          },
+          {
+            "name": "compare",
+            "description": "Compare the certificates of two hosts"
+          }
+        ]
+      }
+    ],
+    "languageModelTools": [
+      {
+        "name": "sslens_inspectCertificate",
+        "displayName": "Inspect SSL Certificate",
+        "toolReferenceName": "sslCertificate",
+        "canBeReferencedInPrompt": true,
+        "icon": "$(shield)",
+        "userDescription": "Fetch and inspect the live SSL/TLS certificate chain of a host",
+        "modelDescription": "Connects to a host over TLS and returns its full certificate chain as JSON: subject, issuer, validity dates, days until expiry, public key algorithm and size, SHA-256/SHA-1 fingerprints, SPKI pinning hashes, subject alternative names, and chain trust status. Use this whenever the user asks about the SSL/TLS certificate, HTTPS setup, expiry, fingerprints, or pinning hashes of a specific domain.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "description": "Hostname or URL to inspect, e.g. 'api.example.com' or 'https://example.com'"
+            },
+            "port": {
+              "type": "number",
+              "description": "TLS port (default 443)"
+            }
+          },
+          "required": [
+            "domain"
+          ]
+        }
+      },
+      {
+        "name": "sslens_generatePinningCode",
+        "displayName": "Generate Certificate Pinning Code",
+        "toolReferenceName": "sslPinningCode",
+        "canBeReferencedInPrompt": true,
+        "icon": "$(code)",
+        "userDescription": "Generate certificate pinning code for a mobile platform using live SPKI hashes",
+        "modelDescription": "Fetches the live certificate of a host, computes SPKI pinning hashes, and returns ready-to-use certificate pinning code for a mobile platform. Supported platforms: 'android-okhttp', 'android-retrofit', 'ios-swift' (URLSession), 'ios-alamofire', 'flutter-dio', 'flutter-http', 'react-native'. Use when the user wants certificate/SSL pinning code for an app.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "description": "Hostname to pin, e.g. 'api.example.com'"
+            },
+            "port": {
+              "type": "number",
+              "description": "TLS port (default 443)"
+            },
+            "platform": {
+              "type": "string",
+              "enum": [
+                "android-okhttp",
+                "android-retrofit",
+                "ios-swift",
+                "ios-alamofire",
+                "flutter-dio",
+                "flutter-http",
+                "react-native"
+              ],
+              "description": "Target platform/HTTP client for the generated code"
+            },
+            "includeChainHashes": {
+              "type": "boolean",
+              "description": "Also include intermediate/root SPKI hashes as backup pins (recommended)"
+            }
+          },
+          "required": [
+            "domain",
+            "platform"
+          ]
+        }
+      },
+      {
+        "name": "sslens_checkExpiry",
+        "displayName": "Check Certificate Expiry",
+        "toolReferenceName": "sslExpiry",
+        "canBeReferencedInPrompt": true,
+        "icon": "$(calendar)",
+        "userDescription": "Check SSL certificate expiry dates for one or more hosts",
+        "modelDescription": "Checks the SSL/TLS certificate expiry for up to 25 hosts in one call and returns, per host: expiry date, days until expiry, issuer, and a status of 'ok', 'expiring-soon' (30 days or less) or 'expired'. Use for questions like 'are my certs about to expire?' or monitoring several domains at once.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "domains": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Hostnames to check, optionally with ports ('example.com' or 'example.com:8443')"
+            }
+          },
+          "required": [
+            "domains"
+          ]
+        }
+      },
+      {
+        "name": "sslens_listSavedDomains",
+        "displayName": "List Saved SSLens Domains",
+        "toolReferenceName": "sslSavedDomains",
+        "canBeReferencedInPrompt": true,
+        "icon": "$(star)",
+        "userDescription": "List the domains saved in the SSLens sidebar",
+        "modelDescription": "Returns the user's saved (favorite) domains from the SSLens sidebar, including alias, port, last-checked timestamp and last known certificate fingerprint. Use this to find out which domains the user monitors before running expiry checks or inspections on 'my domains'.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      }
+    ],
     "commands": [
       {
         "command": "sslens.fetchCertificate",
@@ -123,6 +263,11 @@
         "command": "sslens.importDomains",
         "title": "SSLens: Import Saved Domains",
         "icon": "$(import)"
+      },
+      {
+        "command": "sslens.askCopilot",
+        "title": "SSLens: Ask Copilot About a Certificate",
+        "icon": "$(sparkle)"
       }
     ],
     "viewsContainers": {
@@ -189,6 +334,11 @@
           "command": "sslens.checkExpiry",
           "when": "view == sslensDomains && viewItem == domain",
           "group": "2_export"
+        },
+        {
+          "command": "sslens.askCopilot",
+          "when": "view == sslensDomains && viewItem == domain",
+          "group": "3_ai"
         }
       ],
       "commandPalette": [
@@ -218,9 +368,53 @@
         },
         {
           "command": "sslens.importDomains"
+        },
+        {
+          "command": "sslens.askCopilot"
         }
       ]
     },
+    "walkthroughs": [
+      {
+        "id": "sslens.gettingStarted",
+        "title": "Get started with SSLens",
+        "description": "Inspect certificates, generate pinning code, and use SSLens with GitHub Copilot.",
+        "steps": [
+          {
+            "id": "sslens.fetchFirst",
+            "title": "Fetch your first certificate",
+            "description": "Fetch and inspect the full certificate chain of any HTTPS host.\n[Fetch Certificate](command:sslens.fetchCertificate)",
+            "media": {
+              "markdown": "media/walkthrough/fetch.md"
+            }
+          },
+          {
+            "id": "sslens.savedDomains",
+            "title": "Save domains you care about",
+            "description": "Keep the domains you monitor one click away in the SSLens sidebar.\n[Open SSLens Sidebar](command:workbench.view.extension.sslens-container)",
+            "media": {
+              "markdown": "media/walkthrough/domains.md"
+            }
+          },
+          {
+            "id": "sslens.pinning",
+            "title": "Generate pinning code",
+            "description": "Produce ready-to-ship certificate pinning code for OkHttp, URLSession, Alamofire, Dio, and more.\n[Generate Pinning Code](command:sslens.generatePinningCode)",
+            "media": {
+              "markdown": "media/walkthrough/pinning.md"
+            }
+          },
+          {
+            "id": "sslens.copilot",
+            "title": "Chat with @sslens in Copilot",
+            "description": "Ask @sslens to check, compare, or pin certificates in natural language — or let Copilot agent mode call SSLens tools automatically.\n[Open Copilot Chat](command:workbench.action.chat.open?%5B%22%40sslens%20%2Fcheck%20github.com%22%5D)",
+            "media": {
+              "markdown": "media/walkthrough/copilot.md"
+            }
+          }
+        ]
+      }
+    ],
     "configuration": {
       "title": "SSLens",
       "properties": {
@@ -233,16 +427,6 @@
           "type": "number",
           "default": 10000,
           "description": "Connection timeout in milliseconds"
-        },
-        "sslens.savedDomains": {
-          "type": "array",
-          "default": [],
-          "description": "List of saved domains for quick access"
-        },
-        "sslens.recentCertificates": {
-          "type": "array",
-          "default": [],
-          "description": "Recently fetched certificates"
         },
         "sslens.maxRecentItems": {
           "type": "number",
@@ -263,17 +447,22 @@
     }
   },
   "scripts": {
-    "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
-    "lint": "eslint src --ext ts",
+    "vscode:prepublish": "npm run package-build",
+    "compile": "npm run check-types && node esbuild.mjs",
+    "watch": "node esbuild.mjs --watch",
+    "check-types": "tsc --noEmit",
+    "lint": "eslint src",
+    "package-build": "npm run check-types && npm run lint && node esbuild.mjs --production",
     "package": "vsce package"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
-    "@types/node-forge": "^1.3.14",
-    "@types/vscode": "^1.85.0",
-    "typescript": "^5.3.0"
+    "@types/vscode": "^1.95.0",
+    "@vscode/vsce": "^3.0.0",
+    "esbuild": "^0.24.0",
+    "eslint": "^9.0.0",
+    "typescript": "^5.5.0",
+    "typescript-eslint": "^8.0.0"
   },
   "repository": {
     "type": "git",

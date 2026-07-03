@@ -5,7 +5,7 @@
 
 import * as vscode from 'vscode';
 import { getStorageService } from '../services/storageService';
-import { SavedDomain, CertificateInfo } from '../types';
+import { CertificateInfo } from '../types';
 
 /**
  * Save a domain to favorites
@@ -185,8 +185,7 @@ export async function exportDomainsCommand(): Promise<void> {
     return;
   }
 
-  const fs = require('fs');
-  fs.writeFileSync(saveUri.fsPath, data, 'utf-8');
+  await vscode.workspace.fs.writeFile(saveUri, Buffer.from(data, 'utf-8'));
   vscode.window.showInformationMessage('Data exported successfully');
 }
 
@@ -207,9 +206,9 @@ export async function importDomainsCommand(): Promise<void> {
     return;
   }
 
-  const fs = require('fs');
   try {
-    const data = fs.readFileSync(fileUri[0].fsPath, 'utf-8');
+    const bytes = await vscode.workspace.fs.readFile(fileUri[0]);
+    const data = Buffer.from(bytes).toString('utf-8');
     const storageService = getStorageService();
     await storageService.importData(data);
     

@@ -5,6 +5,34 @@ All notable changes to SSLens will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2026-07-03
+
+### 🤖 GitHub Copilot Integration
+
+- **`@sslens` chat participant** for Copilot Chat with slash commands:
+  - `/check <domain>` — fetch a live certificate chain with an AI security assessment
+  - `/pin <domain> [platform]` — pinning code with live SPKI hashes (platform auto-detected from your prompt)
+  - `/expiry [domains]` — expiry report for given domains or all saved domains
+  - `/compare <a> <b>` — side-by-side certificate comparison
+  - Free-form questions (`@sslens is myapi.com safe to pin?`) answered with live certificate data
+- **Language model tools for Copilot agent mode** — Copilot can now call SSLens on its own:
+  - `#sslCertificate` — inspect a live certificate chain
+  - `#sslPinningCode` — generate pinning code for 7 mobile platforms
+  - `#sslExpiry` — bulk expiry check (up to 25 hosts)
+  - `#sslSavedDomains` — read your saved domains
+- New command **SSLens: Ask Copilot About a Certificate** (also on saved-domain context menu)
+- Everything degrades gracefully to structured markdown reports when no language model is available
+
+### 🚀 Modernization
+
+- Bundled with **esbuild** — dramatically smaller and faster-loading extension
+- Upgraded to VS Code **1.95+** APIs; removed obsolete activation events (faster startup)
+- **ESLint 9** flat config with typescript-eslint; codebase is now lint-clean
+- Getting-started **walkthrough** (Welcome → Get started with SSLens)
+- Declared support for **untrusted and virtual workspaces**
+- File import/export now uses the VS Code filesystem API instead of Node sync I/O
+- Removed internal state from user-facing settings (`sslens.savedDomains`, `sslens.recentCertificates` were never real settings)
+
 ## [1.1.0] - 2026-01-27
 
 ### ✨ New Features

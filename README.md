@@ -21,9 +21,10 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/version-1.1.0-10b981?style=for-the-badge" alt="Version">
+  <img src="https://img.shields.io/badge/version-1.2.0-10b981?style=for-the-badge" alt="Version">
   <img src="https://img.shields.io/badge/license-MIT-10b981?style=for-the-badge" alt="License">
-  <img src="https://img.shields.io/badge/VS%20Code-1.85+-10b981?style=for-the-badge&logo=visual-studio-code" alt="VS Code">
+  <img src="https://img.shields.io/badge/VS%20Code-1.95+-10b981?style=for-the-badge&logo=visual-studio-code" alt="VS Code">
+  <img src="https://img.shields.io/badge/GitHub_Copilot-integrated-10b981?style=for-the-badge&logo=githubcopilot" alt="Copilot">
 </p>
 
 ---
@@ -46,6 +47,7 @@
 | 🔴 Checking certificate expiry manually | ✅ Visual expiry monitoring |
 | 🔴 Comparing staging vs production certs | ✅ Built-in comparison tool |
 | 🔴 Managing multiple domain certificates | ✅ Save favorites & bulk fetch |
+| 🔴 Context-switching to terminal/openssl | ✅ Ask `@sslens` right in Copilot Chat |
 
 ---
 
@@ -124,6 +126,17 @@
 <tr>
 <td colspan="2">
 
+### 🤖 GitHub Copilot Integration <sup>NEW</sup>
+- **`@sslens` chat participant** — inspect, compare, and pin certificates conversationally
+- **AI security assessments** of live certificate chains, powered by your Copilot model
+- **Agent-mode tools** — Copilot can fetch certificates, check expiry, and generate pinning code on its own (`#sslCertificate`, `#sslPinningCode`, `#sslExpiry`, `#sslSavedDomains`)
+- Works without Copilot too — falls back to rich structured reports
+
+</td>
+</tr>
+<tr>
+<td colspan="2">
+
 ### 📋 Domain Management
 - **Save favorite domains** for quick access
 - **Track certificate changes** over time
@@ -149,7 +162,7 @@
 
 ### From VSIX
 ```bash
-code --install-extension sslens-1.1.0.vsix
+code --install-extension sslens-1.2.0.vsix
 ```
 
 ---
@@ -177,6 +190,32 @@ Click **🛡️ SSLens** in the status bar to quickly fetch a certificate!
 
 ---
 
+## 🤖 Using SSLens with GitHub Copilot
+
+Type `@sslens` in Copilot Chat:
+
+```
+@sslens /check api.example.com          → fetch + AI security assessment
+@sslens /pin api.example.com for okhttp → live SPKI hashes + pinning code
+@sslens /expiry                         → expiry report for your saved domains
+@sslens /compare example.com example.org
+@sslens is the cert for myapi.com safe to pin?
+```
+
+In **agent mode**, Copilot calls SSLens tools automatically whenever a task involves
+SSL/TLS certificates — or reference them explicitly:
+
+| Tool | What it does |
+|------|--------------|
+| `#sslCertificate` | Fetch & inspect a live certificate chain |
+| `#sslPinningCode` | Generate pinning code with live SPKI hashes |
+| `#sslExpiry` | Check expiry for up to 25 hosts at once |
+| `#sslSavedDomains` | List your saved SSLens domains |
+
+> 💡 No Copilot? Everything still works — `@sslens` falls back to structured reports, and all classic commands are AI-free.
+
+---
+
 ## 📝 Commands
 
 | Command | Description |
@@ -195,6 +234,7 @@ Click **🛡️ SSLens** in the status bar to quickly fetch a certificate!
 | `SSLens: Save Domain to Favorites` | Add to saved domains |
 | `SSLens: Export Saved Domains` | Export domains to JSON |
 | `SSLens: Import Saved Domains` | Import domains from JSON |
+| `SSLens: Ask Copilot About a Certificate` | Open Copilot Chat pre-filled with `@sslens /check` |
 
 ---
 

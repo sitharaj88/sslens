@@ -12,7 +12,7 @@
 import * as vscode from 'vscode';
 
 // Services
-import { initStorageService, getStorageService } from './services/storageService';
+import { initStorageService } from './services/storageService';
 
 // Commands
 import { fetchCertificateCommand, fetchFromSavedDomain } from './commands/fetchCertificate';
@@ -47,6 +47,10 @@ import {
 import { registerTreeViews, refreshTreeViews } from './providers/treeViewProvider';
 import { getCurrentCertificate } from './providers/webviewPanel';
 
+// GitHub Copilot integration
+import { registerChatParticipant } from './copilot/chatParticipant';
+import { registerLanguageModelTools } from './copilot/tools';
+
 /**
  * Extension activation
  */
@@ -58,6 +62,37 @@ export function activate(context: vscode.ExtensionContext) {
 
   // Register tree views
   registerTreeViews(context);
+
+  // ============================================
+  // GITHUB COPILOT INTEGRATION
+  // ============================================
+
+  // @sslens chat participant for Copilot Chat
+  registerChatParticipant(context);
+
+  // Language model tools for Copilot agent mode
+  registerLanguageModelTools(context);
+
+  // Open Copilot Chat pre-filled with a certificate question
+  context.subscriptions.push(
+    vscode.commands.registerCommand('sslens.askCopilot', async (item?: { domain?: string; port?: number }) => {
+      let query: string | undefined;
+      if (item?.domain) {
+        const port = item.port && item.port !== 443 ? `:${item.port}` : '';
+        query = `@sslens /check ${item.domain}${port}`;
+      } else {
+        const domain = await vscode.window.showInputBox({
+          prompt: 'Domain to ask Copilot about (e.g. api.example.com)',
+          placeHolder: 'api.example.com',
+        });
+        if (!domain) {
+          return;
+        }
+        query = `@sslens /check ${domain.trim()}`;
+      }
+      await vscode.commands.executeCommand('workbench.action.chat.open', { query });
+    })
+  );
 
   // ============================================
   // FETCH COMMANDS
